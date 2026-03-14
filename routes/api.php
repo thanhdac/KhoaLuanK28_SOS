@@ -25,6 +25,10 @@ Route::apiResource('chuc-vu', ChucVuController::class);
 
 // Admin Management
 Route::apiResource('admin', AdminController::class);
+Route::post('admin/login', [AdminController::class, 'login']);
+Route::get('tim-kiem/admin', [AdminController::class, 'search']);
+Route::put('admin/{id}/change-status', [AdminController::class, 'changeStatus']);
+Route::put('admin/{id}/active', [AdminController::class, 'active']);
 
 // =========================================
 // NGƯỜI DÙNG
@@ -34,7 +38,8 @@ Route::apiResource('nguoi-dung', NguoiDungController::class);
 // User Authentication
 Route::post('nguoi-dung/login', [NguoiDungController::class, 'login']);
 Route::post('nguoi-dung/register', [NguoiDungController::class, 'register']);
-Route::post('nguoi-dung/logout', [NguoiDungController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('tim-kiem/nguoi-dung', [NguoiDungController::class, 'search']);
+Route::put('nguoi-dung/{id}/change-status', [NguoiDungController::class, 'changeStatus']);
 
 // =========================================
 // PHÂN LOẠI SỰ CỐ

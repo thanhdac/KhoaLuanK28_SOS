@@ -21,14 +21,28 @@ class AdminRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $adminId = $this->route('admin');
+
+        $rules = [
             'ho_ten' => 'required|string|max:255',
-            'email' => 'required|email|unique:admin,email',
-            'mat_khau' => 'required|string|min:8',
-            'so_dien_thoai' => 'required|digits:10|unique:admin,so_dien_thoai',
-            'id_chuc_vu' => 'required|exists:chuc_vu,id_chuc_vu',
-            'trang_thai' => 'required|integer',
+            'email' => 'required|email',
+            'mat_khau' => 'required|string|min:6',
+            'so_dien_thoai' => 'required|string|min:10',
+            'id_chuc_vu' => 'required|integer',
+            'trang_thai' => 'nullable|integer',
         ];
+
+        // Nếu là update, thêm điều kiện unique bỏ qua ID hiện tại
+        if ($adminId) {
+            $rules['email'] = 'required|email|unique:admin,email,' . $adminId . ',id_admin';
+            $rules['so_dien_thoai'] = 'required|string|min:10|unique:admin,so_dien_thoai,' . $adminId . ',id_admin';
+        } else {
+            // Nếu là create, check unique bình thường
+            $rules['email'] = 'required|email|unique:admin,email';
+            $rules['so_dien_thoai'] = 'required|string|min:10|unique:admin,so_dien_thoai';
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -40,13 +54,12 @@ class AdminRequest extends FormRequest
             'email.email' => 'Email không đúng định dạng',
             'email.unique' => 'Email đã tồn tại',
             'mat_khau.required' => 'Mật khẩu không được để trống',
-            'mat_khau.min' => 'Mật khẩu phải tối thiểu 8 ký tự',
+            'mat_khau.min' => 'Mật khẩu phải tối thiểu 6 ký tự',
             'so_dien_thoai.required' => 'Số điện thoại không được để trống',
-            'so_dien_thoai.digits' => 'Số điện thoại phải có 10 chữ số',
+            'so_dien_thoai.min' => 'Số điện thoại phải tối thiểu 10 ký tự',
             'so_dien_thoai.unique' => 'Số điện thoại đã tồn tại',
             'id_chuc_vu.required' => 'Chức vụ không được để trống',
-            'id_chuc_vu.exists' => 'Chức vụ không tồn tại',
-            'trang_thai.required' => 'Trạng thái không được để trống',
+            'id_chuc_vu.integer' => 'Chức vụ phải là số',
             'trang_thai.integer' => 'Trạng thái phải là số nguyên',
         ];
     }
