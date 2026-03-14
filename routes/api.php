@@ -29,12 +29,16 @@ Route::apiResource('admin', AdminController::class);
 // =========================================
 // NGƯỜI DÙNG
 // =========================================
-Route::apiResource('nguoi-dung', NguoiDungController::class);
+Route::post('/client/dang-nhap', [NguoiDungController::class, 'dangNhap']);
+Route::post('/client/dang-ky', [NguoiDungController::class, 'dangKy']);
+Route::post('/client/quen-mat-khau', [NguoiDungController::class, 'quenMatKhau']);
+Route::post('/client/dat-lai-mat-khau', [NguoiDungController::class, 'datLaiMatKhau']);
+Route::post('/client/kich-hoat', [NguoiDungController::class, 'kichHoat']);
+Route::get('/client/check-token', [NguoiDungController::class, 'checkClient']);
+Route::get('/client/thong-tin', [NguoiDungController::class, 'thongTinNguoiDung']);
+Route::post('/client/cap-nhat-thong-tin', [NguoiDungController::class, 'capNhatThongTin']);
 
-// User Authentication
-Route::post('nguoi-dung/login', [NguoiDungController::class, 'login']);
-Route::post('nguoi-dung/register', [NguoiDungController::class, 'register']);
-Route::post('nguoi-dung/logout', [NguoiDungController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/client/doi-mat-khau', [NguoiDungController::class, 'doiMatKhau']);
 
 // =========================================
 // PHÂN LOẠI SỰ CỐ
