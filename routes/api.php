@@ -23,23 +23,31 @@ Route::apiResource('chuc-nang', ChucNangController::class);
 // Chức vụ (Positions/Roles)
 Route::apiResource('chuc-vu', ChucVuController::class);
 
-// Admin Management
-Route::apiResource('admin', AdminController::class);
+// =========================================
+// ADMIN MANAGEMENT
+// =========================================
 Route::post('admin/login', [AdminController::class, 'login']);
-Route::get('tim-kiem/admin', [AdminController::class, 'search']);
-Route::put('admin/{id}/change-status', [AdminController::class, 'changeStatus']);
-Route::put('admin/{id}/active', [AdminController::class, 'active']);
+Route::get('admin/list', [AdminController::class, 'index']);
+Route::get('admin/chi-tiet/{id}', [AdminController::class, 'show']);
+Route::post('admin/create', [AdminController::class, 'store']);
+Route::put('admin/update/{id}', [AdminController::class, 'update']);
+Route::delete('admin/delete/{id}', [AdminController::class, 'destroy']);
+Route::get('admin/search', [AdminController::class, 'search']);
+Route::put('admin/change-status/{id}', [AdminController::class, 'changeStatus']);
+Route::put('admin/active/{id}', [AdminController::class, 'active']);
 
 // =========================================
-// NGƯỜI DÙNG
+// NGƯỜI DÙNG (USERS)
 // =========================================
-Route::apiResource('nguoi-dung', NguoiDungController::class);
-
-// User Authentication
 Route::post('nguoi-dung/login', [NguoiDungController::class, 'login']);
 Route::post('nguoi-dung/register', [NguoiDungController::class, 'register']);
-Route::get('tim-kiem/nguoi-dung', [NguoiDungController::class, 'search']);
-Route::put('nguoi-dung/{id}/change-status', [NguoiDungController::class, 'changeStatus']);
+Route::get('nguoi-dung/list', [NguoiDungController::class, 'index']);
+Route::get('nguoi-dung/chi-tiet/{id}', [NguoiDungController::class, 'show']);
+Route::post('nguoi-dung/create', [NguoiDungController::class, 'store']);
+Route::put('nguoi-dung/update/{id}', [NguoiDungController::class, 'update']);
+Route::delete('nguoi-dung/delete/{id}', [NguoiDungController::class, 'destroy']);
+Route::get('nguoi-dung/search', [NguoiDungController::class, 'search']);
+Route::put('nguoi-dung/change-status/{id}', [NguoiDungController::class, 'changeStatus']);
 
 // =========================================
 // PHÂN LOẠI SỰ CỐ
