@@ -760,7 +760,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"id_yeu_cau_cuu_ho\": 1,\n  \"so_sao\": 5,\n  \"nhan_xet\": \"Đội xử lý rất chuyên nghiệp\",\n  \"trang_thai\": 1\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"id_yeu_cau\": 1,\n  \"id_nguoi_dung\": 1,\n  \"diem_danh_gia\": 5,\n  \"noi_dung_danh_gia\": \"Đội xử lý rất chuyên nghiệp\"\n}"},
             "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho"]}
           }
         },
@@ -777,7 +777,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"so_sao\": 4,\n  \"nhan_xet\": \"Xử lý tốt nhưng hơi chậm\",\n  \"trang_thai\": 1\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"id_nguoi_dung\": 1,\n  \"diem_danh_gia\": 4,\n  \"noi_dung_danh_gia\": \"Xử lý tốt nhưng hơi chậm\"\n}"},
             "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho", "yeu-cau", "1"]}
           }
         }
