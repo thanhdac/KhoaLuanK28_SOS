@@ -1,0 +1,861 @@
+{
+  "info": {
+    "_postman_id": "rescue-management-api-full",
+    "name": "Hệ thống Cứu hộ 112 - Full API Collection",
+    "description": "API documentation cho toàn bộ hệ thống cứu hộ 112",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Xác thực",
+      "item": [
+        {
+          "name": "1.1 Đăng nhập Admin",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\",\n  \"mat_khau\": \"admin123\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/admin/login", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "login"]}
+          }
+        },
+        {
+          "name": "1.2 Đăng nhập Người dùng",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"mat_khau\": \"user123\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/login", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "login"]}
+          }
+        },
+        {
+          "name": "1.3 Đăng ký Người dùng",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ho_ten\": \"User Test\",\n  \"email\": \"user_test@example.com\",\n  \"mat_khau\": \"password123\",\n  \"so_dien_thoai\": \"0901234567\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/register", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "register"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Phân quyền & Quản trị",
+      "item": [
+        {
+          "name": "2.1 Chức Năng - Danh sách",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/chuc-nang", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "chuc-nang"]}
+          }
+        },
+        {
+          "name": "2.2 Chức Năng - Tạo mới",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_chuc_nang\": \"Quản lý yêu cầu\",\n  \"mo_ta\": \"Quản lý các yêu cầu cứu hộ\",\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/chuc-nang", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "chuc-nang"]}
+          }
+        },
+        {
+          "name": "2.3 Chức Vụ - Danh sách",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/chuc-vu", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "chuc-vu"]}
+          }
+        },
+        {
+          "name": "2.4 Chức Vụ - Chi tiết",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/chuc-vu/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "chuc-vu", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Quản lý Admin",
+      "item": [
+        {
+          "name": "3.1 Danh sách Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/admin/list", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "list"]}
+          }
+        },
+        {
+          "name": "3.2 Chi tiết Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/admin/chi-tiet/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "chi-tiet", "1"]}
+          }
+        },
+        {
+          "name": "3.3 Tạo Admin",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ho_ten\": \"Admin Test\",\n  \"email\": \"admin_test@example.com\",\n  \"mat_khau\": \"password123\",\n  \"so_dien_thoai\": \"0901234567\",\n  \"id_chuc_vu\": 1,\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/admin/create", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "create"]}
+          }
+        },
+        {
+          "name": "3.4 Cập nhật Admin",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ho_ten\": \"Admin Updated\",\n  \"so_dien_thoai\": \"0987654321\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/admin/update/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "update", "1"]}
+          }
+        },
+        {
+          "name": "3.5 Thay đổi trạng thái Admin",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/admin/change-status/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "change-status", "1"]}
+          }
+        },
+        {
+          "name": "3.6 Kích hoạt Admin",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/admin/active/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "active", "1"]}
+          }
+        },
+        {
+          "name": "3.7 Tìm kiếm Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/admin/search?noi_dung_tim=admin", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "search"], "query": [{"key": "noi_dung_tim", "value": "admin"}]}
+          }
+        },
+        {
+          "name": "3.8 Xóa Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/admin/delete/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "admin", "delete", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Quản lý Người dùng",
+      "item": [
+        {
+          "name": "4.1 Danh sách Người dùng",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/list", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "list"]}
+          }
+        },
+        {
+          "name": "4.2 Chi tiết Người dùng",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/chi-tiet/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "chi-tiet", "1"]}
+          }
+        },
+        {
+          "name": "4.3 Tạo Người dùng",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ho_ten\": \"User New\",\n  \"email\": \"user_new@example.com\",\n  \"mat_khau\": \"password123\",\n  \"so_dien_thoai\": \"0901234567\",\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/create", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "create"]}
+          }
+        },
+        {
+          "name": "4.4 Cập nhật Người dùng",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ho_ten\": \"User Updated\",\n  \"so_dien_thoai\": \"0987654321\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/update/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "update", "1"]}
+          }
+        },
+        {
+          "name": "4.5 Thay đổi trạng thái Người dùng",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/change-status/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "change-status", "1"]}
+          }
+        },
+        {
+          "name": "4.6 Tìm kiếm Người dùng",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/search?noi_dung_tim=user", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "search"], "query": [{"key": "noi_dung_tim", "value": "user"}]}
+          }
+        },
+        {
+          "name": "4.7 Xóa Người dùng",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/nguoi-dung/delete/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "nguoi-dung", "delete", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Loại Sự Cố",
+      "item": [
+        {
+          "name": "5.1 Danh sách Loại Sự Cố",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co"]}
+          }
+        },
+        {
+          "name": "5.2 Chi tiết Loại Sự Cố",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1"]}
+          }
+        },
+        {
+          "name": "5.3 Tạo Loại Sự Cố",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_loai_su_co\": \"Tai nạn giao thông\",\n  \"mo_ta\": \"Xử lý các trường hợp tai nạn giao thông\",\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/loai-su-co", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co"]}
+          }
+        },
+        {
+          "name": "5.4 Cập nhật Loại Sự Cố",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_loai_su_co\": \"Tai nạn giao thông updated\",\n  \"mo_ta\": \"Updated description\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1"]}
+          }
+        },
+        {
+          "name": "5.5 Cập nhật trạng thái Loại Sự Cố",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"trang_thai\": 0\n}"},
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1/trang-thai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1", "trang-thai"]}
+          }
+        },
+        {
+          "name": "5.6 Chi tiết của Loại Sự Cố",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1/chi-tiet", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1", "chi-tiet"]}
+          }
+        },
+        {
+          "name": "5.7 Theo trạng thái",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/theo-trang-thai/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "theo-trang-thai", "1"]}
+          }
+        },
+        {
+          "name": "5.8 Yêu cầu cứu hộ theo Loại Sự Cố",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1/yeu-cau-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1", "yeu-cau-cuu-ho"]}
+          }
+        },
+        {
+          "name": "5.9 Đội cứu hộ theo Loại Sự Cố",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1/doi-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1", "doi-cuu-ho"]}
+          }
+        },
+        {
+          "name": "5.10 Tìm kiếm Loại Sự Cố",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/tim-kiem/loai-su-co?noi_dung_tim=tai%20nan", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "tim-kiem", "loai-su-co"], "query": [{"key": "noi_dung_tim", "value": "tai nan"}]}
+          }
+        },
+        {
+          "name": "5.11 Xóa Loại Sự Cố",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/loai-su-co/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Yêu cầu Cứu hộ",
+      "item": [
+        {
+          "name": "6.1 Danh sách Yêu cầu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho"]}
+          }
+        },
+        {
+          "name": "6.2 Chi tiết Yêu cầu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "6.3 Tạo Yêu cầu",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"dien_tich_toa_nha\": \"1000\",\n  \"muc_do_khan_cap\": \"HOA_HOC\",\n  \"thoi_gian_bat_dau\": \"2026-03-17 10:00:00\",\n  \"id_loai_su_co\": 1,\n  \"id_chi_tiet_loai_su_co\": 1,\n  \"id_nguoi_dung\": 1,\n  \"dia_chi\": \"123 Đường ABC, Quận 1, TP.HCM\",\n  \"trang_thai\": \"CHO_XU_LY\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho"]}
+          }
+        },
+        {
+          "name": "6.4 Cập nhật Yêu cầu",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"muc_do_khan_cap\": \"HOA_HOC\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "6.5 Cập nhật trạng thái",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"trang_thai\": \"DANG_XU_LY\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1/trang-thai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1", "trang-thai"]}
+          }
+        },
+        {
+          "name": "6.6 Theo trạng thái",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/theo-trang-thai/CHO_XU_LY", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "theo-trang-thai", "CHO_XU_LY"]}
+          }
+        },
+        {
+          "name": "6.7 Theo mức độ khẩn cấp",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/theo-muc-do-khan-cap/HOA_HOC", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "theo-muc-do-khan-cap", "HOA_HOC"]}
+          }
+        },
+        {
+          "name": "6.8 Phân loại AI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1/phan-loai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1", "phan-loai"]}
+          }
+        },
+        {
+          "name": "6.9 Hàng đợi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1/hang-doi", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1", "hang-doi"]}
+          }
+        },
+        {
+          "name": "6.10 Tìm kiếm Yêu cầu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/tim-kiem/yeu-cau?noi_dung_tim=test", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "tim-kiem", "yeu-cau"], "query": [{"key": "noi_dung_tim", "value": "test"}]}
+          }
+        },
+        {
+          "name": "6.11 Xóa Yêu cầu",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Hàng đợi Xử lý",
+      "item": [
+        {
+          "name": "7.1 Danh sách Hàng đợi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/hang-doi-xu-ly", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "hang-doi-xu-ly"]}
+          }
+        },
+        {
+          "name": "7.2 Hàng đợi theo trạng thái",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/hang-doi-xu-ly/theo-trang-thai/CHO_XU_LY", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "hang-doi-xu-ly", "theo-trang-thai", "CHO_XU_LY"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. AI Phân loại",
+      "item": [
+        {
+          "name": "8.1 Lấy Phân loại AI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-loai-ais/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-loai-ais", "1"]}
+          }
+        },
+        {
+          "name": "8.2 Tạo Phân loại AI",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"phan_loai_chinh\": \"Cứu hộ cháy\",\n  \"do_tin_cay\": \"0.95\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/phan-loai-ais/1/tao-phan-loai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-loai-ais", "1", "tao-phan-loai"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Đội Cứu hộ",
+      "item": [
+        {
+          "name": "9.1 Danh sách Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho"]}
+          }
+        },
+        {
+          "name": "9.2 Chi tiết Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "9.3 Tạo Đội",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_doi_cuu_ho\": \"Đội cứu hộ 01\",\n  \"khu_vuc\": \"Quận 1\",\n  \"trang_thai\": 1,\n  \"da_san_sang\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho"]}
+          }
+        },
+        {
+          "name": "9.4 Cập nhật Đội",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_doi_cuu_ho\": \"Đội cứu hộ 01 updated\",\n  \"khu_vuc\": \"Quận 2\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "9.5 Thành viên Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/thanh-vien", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "thanh-vien"]}
+          }
+        },
+        {
+          "name": "9.6 Thêm Thành viên",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"id_nguoi_dung\": 1,\n  \"vai_tro\": \"Trưởng đội\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/thanh-vien", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "thanh-vien"]}
+          }
+        },
+        {
+          "name": "9.7 Xóa Thành viên",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/thanh-vien/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "thanh-vien", "1"]}
+          }
+        },
+        {
+          "name": "9.8 Tài nguyên Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/tai-nguyen", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "tai-nguyen"]}
+          }
+        },
+        {
+          "name": "9.9 Thêm Tài nguyên",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_tai_nguyen\": \"Xe cứu hộ\",\n  \"loai_tai_nguyen\": \"XE\",\n  \"so_luong\": 2,\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/tai-nguyen", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "tai-nguyen"]}
+          }
+        },
+        {
+          "name": "9.10 Cập nhật Tài nguyên",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"so_luong\": 3\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/tai-nguyen/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "tai-nguyen", "1"]}
+          }
+        },
+        {
+          "name": "9.11 Vị trí Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/vi-tri", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "vi-tri"]}
+          }
+        },
+        {
+          "name": "9.12 Thêm Vị trí",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ten_vi_tri\": \"Trạm cứu hộ quận 1\",\n  \"dia_chi\": \"123 Đường ABC\",\n  \"vi_do\": \"10.7769\",\n  \"kinh_do\": \"106.6869\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/vi-tri", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "vi-tri"]}
+          }
+        },
+        {
+          "name": "9.13 Năng lực Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/nang-luc", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "nang-luc"]}
+          }
+        },
+        {
+          "name": "9.14 Cập nhật Năng lực",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"so_nhan_su_toi_da\": \"20\",\n  \"thoi_gian_phan_ung_trung_binh\": \"15\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/nang-luc", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "nang-luc"]}
+          }
+        },
+        {
+          "name": "9.15 Loại sự cố đủng xử lý",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/loai-su-co-dung-xu-ly", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "loai-su-co-dung-xu-ly"]}
+          }
+        },
+        {
+          "name": "9.16 Theo trạng thái",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/theo-trang-thai/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "theo-trang-thai", "1"]}
+          }
+        },
+        {
+          "name": "9.17 Theo khu vực",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/theo-khu-vuc/Quán%201", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "theo-khu-vuc", "Quán 1"]}
+          }
+        },
+        {
+          "name": "9.18 Tìm kiếm Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/tim-kiem/doi-cuu-ho?noi_dung_tim=cứu%20hộ", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "tim-kiem", "doi-cuu-ho"], "query": [{"key": "noi_dung_tim", "value": "cứu hộ"}]}
+          }
+        },
+        {
+          "name": "9.19 Xóa Đội",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Phân công Cứu hộ",
+      "item": [
+        {
+          "name": "10.1 Danh sách Phân công",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho"]}
+          }
+        },
+        {
+          "name": "10.2 Chi tiết Phân công",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "10.3 Tạo Phân công",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"id_yeu_cau_cuu_ho\": 1,\n  \"id_doi_cuu_ho\": 1,\n  \"thoi_gian_phan_cong\": \"2026-03-17 10:30:00\",\n  \"trang_thai\": \"CHO_XU_LY\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho"]}
+          }
+        },
+        {
+          "name": "10.4 Cập nhật Phân công",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"trang_thai\": \"DANG_XU_LY\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "10.5 Cập nhật trạng thái",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"trang_thai\": \"HOAN_THANH\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/1/trang-thai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "1", "trang-thai"]}
+          }
+        },
+        {
+          "name": "10.6 Theo Yêu cầu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/theo-yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "theo-yeu-cau", "1"]}
+          }
+        },
+        {
+          "name": "10.7 Theo Đội",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/theo-doi/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "theo-doi", "1"]}
+          }
+        },
+        {
+          "name": "10.8 Theo trạng thái",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/theo-trang-thai/CHO_XU_LY", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "theo-trang-thai", "CHO_XU_LY"]}
+          }
+        },
+        {
+          "name": "10.9 Xóa Phân công",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Kết quả Cứu hộ",
+      "item": [
+        {
+          "name": "11.1 Danh sách Kết quả",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho"]}
+          }
+        },
+        {
+          "name": "11.2 Chi tiết Kết quả",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "11.3 Tạo Kết quả cho Phân công",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ket_qua_xu_ly\": \"Thành công\",\n  \"ghi_chu\": \"Xử lý bình thường\",\n  \"thoi_gian_ket_thuc\": \"2026-03-17 11:30:00\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/phan-cong/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "phan-cong", "1"]}
+          }
+        },
+        {
+          "name": "11.4 Lấy Kết quả của Phân công",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/phan-cong/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "phan-cong", "1"]}
+          }
+        },
+        {
+          "name": "11.5 Cập nhật Kết quả",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"ket_qua_xu_ly\": \"Thành công (cập nhật)\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Đánh giá Cứu hộ",
+      "item": [
+        {
+          "name": "12.1 Danh sách Đánh giá",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho"]}
+          }
+        },
+        {
+          "name": "12.2 Chi tiết Đánh giá",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho", "1"]}
+          }
+        },
+        {
+          "name": "12.3 Tạo Đánh giá",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"id_yeu_cau_cuu_ho\": 1,\n  \"so_sao\": 5,\n  \"nhan_xet\": \"Đội xử lý rất chuyên nghiệp\",\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho"]}
+          }
+        },
+        {
+          "name": "12.4 Lấy Đánh giá của Yêu cầu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho", "yeu-cau", "1"]}
+          }
+        },
+        {
+          "name": "12.5 Tạo Đánh giá cho Yêu cầu",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"so_sao\": 4,\n  \"nhan_xet\": \"Xử lý tốt nhưng hơi chậm\",\n  \"trang_thai\": 1\n}"},
+            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho", "yeu-cau", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Thống kê & Analytics",
+      "item": [
+        {
+          "name": "13.1 Tổng số Yêu cầu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/tong-so-yeu-cau", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "tong-so-yeu-cau"]}
+          }
+        },
+        {
+          "name": "13.2 Yêu cầu theo Loại",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/yeu-cau-theo-loai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "yeu-cau-theo-loai"]}
+          }
+        },
+        {
+          "name": "13.3 Yêu cầu theo Mức độ khẩn cấp",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/yeu-cau-theo-muc-do-khan-cap", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "yeu-cau-theo-muc-do-khan-cap"]}
+          }
+        },
+        {
+          "name": "13.4 Trạng thái Xử lý",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/trang-thai-xu-ly", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "trang-thai-xu-ly"]}
+          }
+        },
+        {
+          "name": "13.5 Hiệu suất Đội cứu hộ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/hieu-suat-doi-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "hieu-suat-doi-cuu-ho"]}
+          }
+        },
+        {
+          "name": "13.6 Danh sách Đội có sẵn",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/danh-sach-doi-co-san", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "danh-sach-doi-co-san"]}
+          }
+        },
+        {
+          "name": "13.7 Dữ liệu Heatmap",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/thong-ke/heatmap", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "thong-ke", "heatmap"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. Health Check",
+      "item": [
+        {
+          "name": "14.1 API Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "http://localhost:8000/api/health", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "health"]}
+          }
+        }
+      ]
+    }
+  ]
+}
