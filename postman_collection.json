@@ -123,11 +123,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/admin",
+              "raw": "http://localhost:8000/api/admin/list",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "admin"]
+              "path": ["api", "admin", "list"]
             }
           }
         },
@@ -152,11 +152,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/admin/{{adminId}}",
+              "raw": "http://localhost:8000/api/admin/chi-tiet/{{adminId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "admin", "{{adminId}}"]
+              "path": ["api", "admin", "chi-tiet", "{{adminId}}"]
             }
           }
         },
@@ -193,11 +193,11 @@
               "raw": "{\n  \"ho_ten\": \"Admin Test {{$timestamp}}\",\n  \"email\": \"admin_test_{{$timestamp}}@example.com\",\n  \"mat_khau\": \"password123\",\n  \"so_dien_thoai\": \"0901234567\",\n  \"id_chuc_vu\": 1,\n  \"trang_thai\": 1\n}"
             },
             "url": {
-              "raw": "http://localhost:8000/api/admin",
+              "raw": "http://localhost:8000/api/admin/create",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "admin"]
+              "path": ["api", "admin", "create"]
             }
           }
         },
@@ -231,11 +231,11 @@
               "raw": "{\n  \"ho_ten\": \"Admin Updated\",\n  \"so_dien_thoai\": \"0987654321\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8000/api/admin/{{newAdminId}}",
+              "raw": "http://localhost:8000/api/admin/update/{{newAdminId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "admin", "{{newAdminId}}"]
+              "path": ["api", "admin", "update", "{{newAdminId}}"]
             }
           }
         },
@@ -260,11 +260,11 @@
             "method": "PUT",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/admin/{{newAdminId}}/change-status",
+              "raw": "http://localhost:8000/api/admin/change-status/{{newAdminId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "admin", "{{newAdminId}}", "change-status"]
+              "path": ["api", "admin", "change-status", "{{newAdminId}}"]
             }
           }
         },
@@ -289,11 +289,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/tim-kiem/admin?noi_dung_tim=admin",
+              "raw": "http://localhost:8000/api/admin/search?noi_dung_tim=admin",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "tim-kiem", "admin"],
+              "path": ["api", "admin", "search"],
               "query": [
                 {
                   "key": "noi_dung_tim",
@@ -324,11 +324,11 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/admin/{{newAdminId}}",
+              "raw": "http://localhost:8000/api/admin/delete/{{newAdminId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "admin", "{{newAdminId}}"]
+              "path": ["api", "admin", "delete", "{{newAdminId}}"]
             }
           }
         }
@@ -396,11 +396,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/nguoi-dung",
+              "raw": "http://localhost:8000/api/nguoi-dung/list",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "nguoi-dung"]
+              "path": ["api", "nguoi-dung", "list"]
             }
           }
         },
@@ -425,11 +425,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/nguoi-dung/{{userId}}",
+              "raw": "http://localhost:8000/api/nguoi-dung/chi-tiet/{{userId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "nguoi-dung", "{{userId}}"]
+              "path": ["api", "nguoi-dung", "chi-tiet", "{{userId}}"]
             }
           }
         },
@@ -463,11 +463,11 @@
               "raw": "{\n  \"ho_ten\": \"User Created {{$timestamp}}\",\n  \"email\": \"user_created_{{$timestamp}}@example.com\",\n  \"so_dien_thoai\": \"0901234567\",\n  \"mat_khau\": \"password123\",\n  \"trang_thai\": 1\n}"
             },
             "url": {
-              "raw": "http://localhost:8000/api/nguoi-dung",
+              "raw": "http://localhost:8000/api/nguoi-dung/create",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "nguoi-dung"]
+              "path": ["api", "nguoi-dung", "create"]
             }
           }
         },
@@ -501,11 +501,11 @@
               "raw": "{\n  \"ho_ten\": \"User Updated\",\n  \"so_dien_thoai\": \"0987654321\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8000/api/nguoi-dung/{{userId}}",
+              "raw": "http://localhost:8000/api/nguoi-dung/update/{{userId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "nguoi-dung", "{{userId}}"]
+              "path": ["api", "nguoi-dung", "update", "{{userId}}"]
             }
           }
         },
@@ -530,11 +530,11 @@
             "method": "PUT",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/nguoi-dung/{{userId}}/change-status",
+              "raw": "http://localhost:8000/api/nguoi-dung/change-status/{{userId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "nguoi-dung", "{{userId}}", "change-status"]
+              "path": ["api", "nguoi-dung", "change-status", "{{userId}}"]
             }
           }
         },
@@ -559,11 +559,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/tim-kiem/nguoi-dung?noi_dung_tim=user",
+              "raw": "http://localhost:8000/api/nguoi-dung/search?noi_dung_tim=user",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "tim-kiem", "nguoi-dung"],
+              "path": ["api", "nguoi-dung", "search"],
               "query": [
                 {
                   "key": "noi_dung_tim",
@@ -594,11 +594,11 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:8000/api/nguoi-dung/{{userId}}",
+              "raw": "http://localhost:8000/api/nguoi-dung/delete/{{userId}}",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8000",
-              "path": ["api", "nguoi-dung", "{{userId}}"]
+              "path": ["api", "nguoi-dung", "delete", "{{userId}}"]
             }
           }
         }
