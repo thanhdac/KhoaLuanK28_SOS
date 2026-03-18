@@ -16,13 +16,16 @@ class NangLucDoiSeeder extends Seeder
         $dois = DoiCuuHo::all();
 
         foreach ($dois as $doi) {
-            NangLucDoi::create([
-                'id_doi_cuu_ho' => $doi->id_doi_cuu_ho,
-                'so_viec_dang_xu_ly' => 0,
-                'so_viec_toi_da' => 3,
-                'ty_le_hoan_thanh' => 0.90 + (rand(0, 20) / 100),
-                'thoi_gian_xu_ly_tb' => 25 + rand(5, 20)
-            ]);
+            NangLucDoi::updateOrCreate(
+                ['id_doi_cuu_ho' => $doi->id_doi_cuu_ho],
+                [
+                    'id_doi_cuu_ho' => $doi->id_doi_cuu_ho,
+                    'so_viec_dang_xu_ly' => 0,
+                    'so_viec_toi_da' => 3,
+                    'ty_le_hoan_thanh' => 0.90 + (rand(0, 20) / 100),
+                    'thoi_gian_xu_ly_tb' => 25 + rand(5, 20)
+                ]
+            );
         }
 
         echo "✅ Năng Lực Đội Seeding: 5 năng lực đội\n";

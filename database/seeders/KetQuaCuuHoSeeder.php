@@ -17,13 +17,16 @@ class KetQuaCuuHoSeeder extends Seeder
         $count = 0;
 
         foreach ($assignments->take(5) as $assignment) {
-            KetQuaCuuHo::create([
-                'id_phan_cong' => $assignment->id_phan_cong,
-                'bao_cao_hien_truong' => "Báo cáo hiện trường: Đã kiểm soát tình hình. Kết quả: Thành công",
-                'trang_thai_ket_qua' => 'HOAN_THANH',
-                'hinh_anh_minh_chung' => 'result_image.jpg',
-                'thoi_gian_ket_thuc' => now()->subHours(rand(1, 12))
-            ]);
+            KetQuaCuuHo::updateOrCreate(
+                ['id_phan_cong' => $assignment->id_phan_cong],
+                [
+                    'id_phan_cong' => $assignment->id_phan_cong,
+                    'bao_cao_hien_truong' => "Báo cáo hiện trường: Đã kiểm soát tình hình. Kết quả: Thành công",
+                    'trang_thai_ket_qua' => 'HOAN_THANH',
+                    'hinh_anh_minh_chung' => 'result_image.jpg',
+                    'thoi_gian_ket_thuc' => now()->subHours(rand(1, 12))
+                ]
+            );
             $count++;
         }
 

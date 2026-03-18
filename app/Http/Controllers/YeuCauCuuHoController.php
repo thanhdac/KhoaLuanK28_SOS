@@ -9,6 +9,57 @@ use Illuminate\Support\Facades\DB;
 
 class YeuCauCuuHoController extends Controller
 {
+    private function normalizeTrangThaiYeuCau(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $v = strtoupper(trim($value));
+
+        // Backward-compatible mapping (old lowercase API)
+        $map = [
+            'MOI' => 'CHO_XU_LY',
+            'DANG_XU_LY' => 'DANG_XU_LY',
+            'DA_HOAN_THANH' => 'HOAN_THANH',
+            'DA_HUY' => 'HUY_BO',
+            'HUY' => 'HUY_BO',
+
+            // Already-canonical
+            'CHO_XU_LY' => 'CHO_XU_LY',
+            'HOAN_THANH' => 'HOAN_THANH',
+            'HUY_BO' => 'HUY_BO',
+        ];
+
+        return $map[$v] ?? $v;
+    }
+
+    private function normalizeMucDoKhanCap($value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        // Accept old numeric level (1-5) and map to canonical string
+        if (is_numeric($value)) {
+            $n = (int) $value;
+            if ($n <= 1) {
+                return 'LOW';
+            }
+            if ($n == 2) {
+                return 'MEDIUM';
+            }
+            if ($n == 3) {
+                return 'HIGH';
+            }
+            return 'CRITICAL';
+        }
+
+        $v = strtoupper(trim((string) $value));
+        $allowed = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+        return in_array($v, $allowed, true) ? $v : $v;
+    }
+
     /**
      * Display paginated list of all rescue requests
      *
@@ -60,15 +111,22 @@ class YeuCauCuuHoController extends Controller
                 'id_loai_su_co' => 'required|integer|exists:loai_su_co,id_loai_su_co',
                 'vi_tri_lat' => 'required|numeric',
                 'vi_tri_lng' => 'required|numeric',
-                'vi_tri_dia_chi' => 'required|string|max:255',
-                'chi_tiet' => 'required|string',
+                'vi_tri_dia_chi' => 'nullable|string|max:500',
+                'chi_tiet' => 'nullable|string',
                 'mo_ta' => 'nullable|string',
                 'hinh_anh' => 'nullable|string',
                 'so_nguoi_bi_anh_huong' => 'nullable|integer|min:0',
-                'muc_do_khan_cap' => 'nullable|integer|between:1,5',
+                'muc_do_khan_cap' => 'nullable',
                 'diem_uu_tien' => 'nullable|numeric',
-                'trang_thai' => 'nullable|string|in:moi,dang_xu_ly,da_hoan_thanh,da_huy'
+                'trang_thai' => 'nullable|string'
             ]);
+
+            if (array_key_exists('trang_thai', $validated)) {
+                $validated['trang_thai'] = $this->normalizeTrangThaiYeuCau($validated['trang_thai']);
+            }
+            if (array_key_exists('muc_do_khan_cap', $validated)) {
+                $validated['muc_do_khan_cap'] = $this->normalizeMucDoKhanCap($validated['muc_do_khan_cap']);
+            }
 
             $item = YeuCauCuuHo::create($validated);
 
@@ -76,8 +134,8 @@ class YeuCauCuuHoController extends Controller
             HangDoiXuLy::create([
                 'id_yeu_cau' => $item->id_yeu_cau,
                 'diem_uu_tien' => $validated['diem_uu_tien'] ?? 0,
-                'muc_khan_cap' => $validated['muc_do_khan_cap'] ?? 1,
-                'trang_thai' => 'doi_xu_ly'
+                'muc_khan_cap' => $validated['muc_do_khan_cap'] ?? 'MEDIUM',
+                'trang_thai' => 'WAITING'
             ]);
 
             $item->load('nguoiDung', 'loaiSuCo', 'hangDoiXuLy');
@@ -155,15 +213,22 @@ class YeuCauCuuHoController extends Controller
                 'id_loai_su_co' => 'nullable|integer|exists:loai_su_co,id_loai_su_co',
                 'vi_tri_lat' => 'nullable|numeric',
                 'vi_tri_lng' => 'nullable|numeric',
-                'vi_tri_dia_chi' => 'nullable|string|max:255',
+                'vi_tri_dia_chi' => 'nullable|string|max:500',
                 'chi_tiet' => 'nullable|string',
                 'mo_ta' => 'nullable|string',
                 'hinh_anh' => 'nullable|string',
                 'so_nguoi_bi_anh_huong' => 'nullable|integer|min:0',
-                'muc_do_khan_cap' => 'nullable|integer|between:1,5',
+                'muc_do_khan_cap' => 'nullable',
                 'diem_uu_tien' => 'nullable|numeric',
-                'trang_thai' => 'nullable|string|in:moi,dang_xu_ly,da_hoan_thanh,da_huy'
+                'trang_thai' => 'nullable|string'
             ]);
+
+            if (array_key_exists('trang_thai', $validated)) {
+                $validated['trang_thai'] = $this->normalizeTrangThaiYeuCau($validated['trang_thai']);
+            }
+            if (array_key_exists('muc_do_khan_cap', $validated)) {
+                $validated['muc_do_khan_cap'] = $this->normalizeMucDoKhanCap($validated['muc_do_khan_cap']);
+            }
 
             $item->update($validated);
 
@@ -248,9 +313,10 @@ class YeuCauCuuHoController extends Controller
     {
         try {
             $perPage = $request->get('per_page', 15);
-            $validStatuses = ['moi', 'dang_xu_ly', 'da_hoan_thanh', 'da_huy'];
+            $normalized = $this->normalizeTrangThaiYeuCau($status);
+            $validStatuses = ['CHO_XU_LY', 'DANG_XU_LY', 'HOAN_THANH', 'HUY_BO'];
 
-            if (!in_array($status, $validStatuses)) {
+            if (!in_array($normalized, $validStatuses, true)) {
                 return Response::json([
                     'success' => false,
                     'message' => 'Trạng thái không hợp lệ'
@@ -262,12 +328,12 @@ class YeuCauCuuHoController extends Controller
                 'loaiSuCo',
                 'hangDoiXuLy'
             ])
-            ->where('trang_thai', $status)
+            ->where('trang_thai', $normalized)
             ->paginate($perPage);
 
             return Response::json([
                 'success' => true,
-                'message' => "Danh sách yêu cầu với trạng thái: {$status}",
+                'message' => "Danh sách yêu cầu với trạng thái: {$normalized}",
                 'data' => $items
             ], 200);
         } catch (\Exception $e) {
@@ -291,14 +357,24 @@ class YeuCauCuuHoController extends Controller
             $item = YeuCauCuuHo::findOrFail($id);
 
             $validated = $request->validate([
-                'trang_thai' => 'required|string|in:moi,dang_xu_ly,da_hoan_thanh,da_huy'
+                'trang_thai' => 'required|string'
             ]);
 
-            $item->update(['trang_thai' => $validated['trang_thai']]);
+            $normalized = $this->normalizeTrangThaiYeuCau($validated['trang_thai']);
+            $allowed = ['CHO_XU_LY', 'DANG_XU_LY', 'HOAN_THANH', 'HUY_BO'];
+            if (!in_array($normalized, $allowed, true)) {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Trạng thái không hợp lệ'
+                ], 422);
+            }
+
+            $item->update(['trang_thai' => $normalized]);
 
             // Update processing queue status if applicable
             if ($item->hangDoiXuLy) {
-                $item->hangDoiXuLy->update(['trang_thai' => $validated['trang_thai']]);
+                $queueStatus = $normalized === 'CHO_XU_LY' ? 'WAITING' : ($normalized === 'DANG_XU_LY' ? 'PROCESSING' : 'DONE');
+                $item->hangDoiXuLy->update(['trang_thai' => $queueStatus]);
             }
 
             $item->load('nguoiDung', 'loaiSuCo', 'hangDoiXuLy');
@@ -338,11 +414,13 @@ class YeuCauCuuHoController extends Controller
     {
         try {
             $perPage = $request->get('per_page', 15);
+            $normalized = $this->normalizeMucDoKhanCap($muc_do);
+            $valid = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
 
-            if ($muc_do < 1 || $muc_do > 5) {
+            if (!in_array($normalized, $valid, true)) {
                 return Response::json([
                     'success' => false,
-                    'message' => 'Mức độ khan cấp phải từ 1 đến 5'
+                    'message' => 'Mức độ khẩn cấp không hợp lệ'
                 ], 422);
             }
 
@@ -351,13 +429,13 @@ class YeuCauCuuHoController extends Controller
                 'loaiSuCo',
                 'hangDoiXuLy'
             ])
-            ->where('muc_do_khan_cap', $muc_do)
+            ->where('muc_do_khan_cap', $normalized)
             ->orderBy('diem_uu_tien', 'desc')
             ->paginate($perPage);
 
             return Response::json([
                 'success' => true,
-                'message' => "Danh sách yêu cầu mức độ khan cấp: {$muc_do}",
+                'message' => "Danh sách yêu cầu mức độ khẩn cấp: {$normalized}",
                 'data' => $items
             ], 200);
         } catch (\Exception $e) {
@@ -412,9 +490,10 @@ class YeuCauCuuHoController extends Controller
     {
         try {
             $perPage = $request->get('per_page', 15);
-            $validStatuses = ['doi_xu_ly', 'dang_xu_ly', 'hoan_thanh', 'huy'];
+            $normalized = strtoupper(trim((string) $trang_thai));
+            $validStatuses = ['WAITING', 'PROCESSING', 'DONE'];
 
-            if (!in_array($trang_thai, $validStatuses)) {
+            if (!in_array($normalized, $validStatuses, true)) {
                 return Response::json([
                     'success' => false,
                     'message' => 'Trạng thái không hợp lệ'
@@ -425,15 +504,56 @@ class YeuCauCuuHoController extends Controller
                 'yeuCau.nguoiDung',
                 'yeuCau.loaiSuCo'
             ])
-            ->where('trang_thai', $trang_thai)
+            ->where('trang_thai', $normalized)
             ->orderBy('diem_uu_tien', 'desc')
             ->paginate($perPage);
 
             return Response::json([
                 'success' => true,
-                'message' => "Hàng đợi với trạng thái: {$trang_thai}",
+                'message' => "Hàng đợi với trạng thái: {$normalized}",
                 'data' => $queue
             ], 200);
+        } catch (\Exception $e) {
+            return Response::json([
+                'success' => false,
+                'message' => 'Lỗi khi lấy hàng đợi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get processing queue info for a specific rescue request
+     *
+     * Route: GET yeu-cau-cuu-ho/{id}/hang-doi
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getHangDoi($id)
+    {
+        try {
+            $yeuCau = YeuCauCuuHo::with(['hangDoiXuLy'])->findOrFail($id);
+            $queue = $yeuCau->hangDoiXuLy;
+
+            if (!$queue) {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Yêu cầu chưa có trong hàng đợi xử lý'
+                ], 404);
+            }
+
+            $queue->load(['yeuCau.nguoiDung', 'yeuCau.loaiSuCo']);
+
+            return Response::json([
+                'success' => true,
+                'message' => 'Thông tin hàng đợi xử lý',
+                'data' => $queue
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Response::json([
+                'success' => false,
+                'message' => 'Yêu cầu cứu hộ không tồn tại'
+            ], 404);
         } catch (\Exception $e) {
             return Response::json([
                 'success' => false,
@@ -835,10 +955,10 @@ class YeuCauCuuHoController extends Controller
             }
 
             $total = $query->count();
-            $new = $query->where('trang_thai', 'moi')->count();
-            $processing = $query->where('trang_thai', 'dang_xu_ly')->count();
-            $completed = $query->where('trang_thai', 'da_hoan_thanh')->count();
-            $cancelled = $query->where('trang_thai', 'da_huy')->count();
+            $new = $query->where('trang_thai', 'CHO_XU_LY')->count();
+            $processing = $query->where('trang_thai', 'DANG_XU_LY')->count();
+            $completed = $query->where('trang_thai', 'HOAN_THANH')->count();
+            $cancelled = $query->where('trang_thai', 'HUY_BO')->count();
 
             $avgUrgency = $query->avg('muc_do_khan_cap') ?? 0;
             $avgAffectedPeople = $query->avg('so_nguoi_bi_anh_huong') ?? 0;

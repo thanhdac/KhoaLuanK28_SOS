@@ -90,22 +90,22 @@ Route::post('phan-loai-ais/{id_yeu_cau}/tao-phan-loai', [YeuCauCuuHoController::
 Route::apiResource('doi-cuu-ho', DoiCuuHoController::class);
 
 // Đội cứu hộ - Advanced operations
-Route::get('doi-cuu-ho/{id}/thanh-vien', [DoiCuuHoController::class, 'getThanhVien']);
-Route::post('doi-cuu-ho/{id}/thanh-vien', [DoiCuuHoController::class, 'addThanhVien']);
-Route::delete('doi-cuu-ho/{id}/thanh-vien/{id_thanh_vien}', [DoiCuuHoController::class, 'removeThanhVien']);
+Route::get('get-doi-cuu-ho/{id}/thanh-vien', [DoiCuuHoController::class, 'getThanhVien']);
+Route::post('post-doi-cuu-ho/{id}/thanh-vien', [DoiCuuHoController::class, 'addThanhVien']);
+Route::delete('delete-doi-cuu-ho/{id}/thanh-vien/{id_thanh_vien}', [DoiCuuHoController::class, 'removeThanhVien']);
 
-Route::get('doi-cuu-ho/{id}/tai-nguyen', [DoiCuuHoController::class, 'getTaiNguyen']);
-Route::post('doi-cuu-ho/{id}/tai-nguyen', [DoiCuuHoController::class, 'addTaiNguyen']);
-Route::put('doi-cuu-ho/{id}/tai-nguyen/{id_tai_nguyen}', [DoiCuuHoController::class, 'updateTaiNguyen']);
+Route::get('get-doi-cuu-ho/{id}/tai-nguyen', [DoiCuuHoController::class, 'getTaiNguyen']);
+Route::post('post-doi-cuu-ho/{id}/tai-nguyen', [DoiCuuHoController::class, 'addTaiNguyen']);
+Route::put('put-doi-cuu-ho/{id}/tai-nguyen/{id_tai_nguyen}', [DoiCuuHoController::class, 'updateTaiNguyen']);
 
-Route::get('doi-cuu-ho/{id}/vi-tri', [DoiCuuHoController::class, 'getViTri']);
-Route::post('doi-cuu-ho/{id}/vi-tri', [DoiCuuHoController::class, 'addViTri']);
+Route::get('get-doi-cuu-ho/{id}/vi-tri', [DoiCuuHoController::class, 'getViTri']);
+Route::post('post-doi-cuu-ho/{id}/vi-tri', [DoiCuuHoController::class, 'addViTri']);
 
-Route::get('doi-cuu-ho/{id}/nang-luc', [DoiCuuHoController::class, 'getNangLuc']);
-Route::put('doi-cuu-ho/{id}/nang-luc', [DoiCuuHoController::class, 'updateNangLuc']);
+Route::get('get-doi-cuu-ho/{id}/nang-luc', [DoiCuuHoController::class, 'getNangLuc']);
+Route::put('put-doi-cuu-ho/{id}/nang-luc', [DoiCuuHoController::class, 'updateNangLuc']);
 
-Route::get('doi-cuu-ho/{id}/loai-su-co-dung-xu-ly', [DoiCuuHoController::class, 'getLoaiSuCoDungXuLy']);
-Route::post('doi-cuu-ho/{id}/loai-su-co-dung-xu-ly', [DoiCuuHoController::class, 'addLoaiSuCoDungXuLy']);
+Route::get('get-doi-cuu-ho/{id}/loai-su-co-dung-xu-ly', [DoiCuuHoController::class, 'getLoaiSuCoDungXuLy']);
+Route::post('post-doi-cuu-ho/{id}/loai-su-co-dung-xu-ly', [DoiCuuHoController::class, 'addLoaiSuCoDungXuLy']);
 
 Route::get('doi-cuu-ho/theo-trang-thai/{trang_thai}', [DoiCuuHoController::class, 'getByStatus']);
 Route::get('doi-cuu-ho/theo-khu-vuc/{khu_vuc}', [DoiCuuHoController::class, 'getByKhuVuc']);
@@ -123,15 +123,15 @@ Route::get('phan-cong-cuu-ho/theo-trang-thai/{trang_thai}', [PhanCongCuuHoContro
 
 // Kết quả cứu hộ (Response Results)
 Route::apiResource('ket-qua-cuu-ho', KetQuaCuuHoController::class, ['except' => ['store', 'destroy']]);
-Route::post('ket-qua-cuu-ho/phan-cong/{id_phan_cong}', [KetQuaCuuHoController::class, 'createForPhanCong']);
-Route::get('ket-qua-cuu-ho/phan-cong/{id_phan_cong}', [KetQuaCuuHoController::class, 'getByPhanCong']);
+Route::post('post-ket-qua-cuu-ho/phan-cong/{id_phan_cong}', [KetQuaCuuHoController::class, 'createForPhanCong']);
+Route::get('get-ket-qua-cuu-ho/phan-cong/{id_phan_cong}', [KetQuaCuuHoController::class, 'getByPhanCong']);
 
 // =========================================
 // ĐÁNH GIÁ CỨU HỘ (RATINGS/REVIEWS)
 // =========================================
 Route::apiResource('danh-gia-cuu-ho', DanhGiaCuuHoController::class, ['except' => ['update', 'destroy']]);
-Route::get('danh-gia-cuu-ho/yeu-cau/{id_yeu_cau}', [DanhGiaCuuHoController::class, 'getByYeuCau']);
-Route::post('danh-gia-cuu-ho/yeu-cau/{id_yeu_cau}', [DanhGiaCuuHoController::class, 'createForYeuCau']);
+Route::get('get-danh-gia-cuu-ho/yeu-cau/{id_yeu_cau}', [DanhGiaCuuHoController::class, 'getByYeuCau']);
+Route::post('post-danh-gia-cuu-ho/yeu-cau/{id_yeu_cau}', [DanhGiaCuuHoController::class, 'createForYeuCau']);
 
 // =========================================
 // STATISTICS & ANALYTICS

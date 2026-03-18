@@ -7,15 +7,18 @@ use Illuminate\Http\Request;
 
 class ChucNangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = ChucNang::paginate(15);
+        $perPage = $request->get('per_page', 15);
+        $items = ChucNang::paginate($perPage);
         return response()->json($items);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([]);
+        $validated = $request->validate([
+            'ten_chuc_nang' => 'required|string|max:255'
+        ]);
         $item = ChucNang::create($validated);
         return response()->json($item, 201);
     }
@@ -29,7 +32,9 @@ class ChucNangController extends Controller
     public function update(Request $request, $id)
     {
         $item = ChucNang::findOrFail($id);
-        $validated = $request->validate([]);
+        $validated = $request->validate([
+            'ten_chuc_nang' => 'sometimes|string|max:255'
+        ]);
         $item->update($validated);
         return response()->json($item);
     }

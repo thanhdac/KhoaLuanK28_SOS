@@ -24,12 +24,15 @@ class LoaiSuCoSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            LoaiSuCo::create([
-                'ten_danh_muc' => $type['ten'],
-                'slug_danh_muc' => $type['slug'],
-                'mo_ta' => $type['mo_ta'],
-                'trang_thai' => 1
-            ]);
+            LoaiSuCo::updateOrCreate(
+                ['slug_danh_muc' => $type['slug']],
+                [
+                    'ten_danh_muc' => $type['ten'],
+                    'slug_danh_muc' => $type['slug'],
+                    'mo_ta' => $type['mo_ta'],
+                    'trang_thai' => 1
+                ]
+            );
         }
 
         echo "✅ Loại Sự Cố Seeding: 8 loại sự cố\n";

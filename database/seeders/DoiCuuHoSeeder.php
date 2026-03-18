@@ -21,15 +21,18 @@ class DoiCuuHoSeeder extends Seeder
         ];
 
         foreach ($teams as $team) {
-            DoiCuuHo::create([
-                'ten_co' => $team['ten'],
-                'khu_vuc_quan_ly' => $team['khu_vuc'],
-                'so_dien_thoai_hotline' => $team['sdt'],
-                'vi_tri_lat' => $team['lat'],
-                'vi_tri_lng' => $team['lng'],
-                'trang_thai' => 'SAN_SANG',
-                'mo_ta' => "Đội cứu hộ khu vực {$team['khu_vuc']}"
-            ]);
+            DoiCuuHo::updateOrCreate(
+                ['ten_co' => $team['ten']],
+                [
+                    'ten_co' => $team['ten'],
+                    'khu_vuc_quan_ly' => $team['khu_vuc'],
+                    'so_dien_thoai_hotline' => $team['sdt'],
+                    'vi_tri_lat' => $team['lat'],
+                    'vi_tri_lng' => $team['lng'],
+                    'trang_thai' => 'SAN_SANG',
+                    'mo_ta' => "Đội cứu hộ khu vực {$team['khu_vuc']}"
+                ]
+            );
         }
 
         echo "✅ Đội Cứu Hộ Seeding: 5 đội cứu hộ\n";

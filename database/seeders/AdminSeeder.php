@@ -14,6 +14,10 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $chucVus = ChucVu::all();
+        if ($chucVus->count() < 2) {
+            echo "⚠️  AdminSeeder skipped: cần seed ChucVu trước\n";
+            return;
+        }
 
         $admins = [
             ['ho_ten' => 'Nguyễn Văn A', 'email' => 'admin@example.com', 'mat_khau' => bcrypt('admin123'), 'so_dien_thoai' => '0901234567', 'id_chuc_vu' => $chucVus[0]->id_chuc_vu, 'trang_thai' => 1],
@@ -24,7 +28,10 @@ class AdminSeeder extends Seeder
         ];
 
         foreach ($admins as $admin) {
-            Admin::create($admin);
+            Admin::updateOrCreate(
+                ['email' => $admin['email']],
+                $admin
+            );
         }
 
         echo "✅ Admin Seeding: 5 tài khoản admin\n";

@@ -54,7 +54,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_chuc_nang\": \"Quản lý yêu cầu\",\n  \"mo_ta\": \"Quản lý các yêu cầu cứu hộ\",\n  \"trang_thai\": 1\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"ten_chuc_nang\": \"Quản lý yêu cầu\"\n}"},
             "url": {"raw": "http://localhost:8000/api/chuc-nang", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "chuc-nang"]}
           }
         },
@@ -234,7 +234,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_loai_su_co\": \"Tai nạn giao thông\",\n  \"mo_ta\": \"Xử lý các trường hợp tai nạn giao thông\",\n  \"trang_thai\": 1\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"ten_danh_muc\": \"Tai nạn giao thông\",\n  \"slug_danh_muc\": \"tai-nan-giao-thong\",\n  \"mo_ta\": \"Xử lý các trường hợp tai nạn giao thông\",\n  \"trang_thai\": 1\n}"},
             "url": {"raw": "http://localhost:8000/api/loai-su-co", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co"]}
           }
         },
@@ -243,7 +243,7 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_loai_su_co\": \"Tai nạn giao thông updated\",\n  \"mo_ta\": \"Updated description\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"ten_danh_muc\": \"Tai nạn giao thông updated\",\n  \"mo_ta\": \"Updated description\"\n}"},
             "url": {"raw": "http://localhost:8000/api/loai-su-co/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "loai-su-co", "1"]}
           }
         },
@@ -330,7 +330,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"dien_tich_toa_nha\": \"1000\",\n  \"muc_do_khan_cap\": \"HOA_HOC\",\n  \"thoi_gian_bat_dau\": \"2026-03-17 10:00:00\",\n  \"id_loai_su_co\": 1,\n  \"id_chi_tiet_loai_su_co\": 1,\n  \"id_nguoi_dung\": 1,\n  \"dia_chi\": \"123 Đường ABC, Quận 1, TP.HCM\",\n  \"trang_thai\": \"CHO_XU_LY\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"id_nguoi_dung\": 1,\n  \"id_loai_su_co\": 1,\n  \"vi_tri_lat\": 10.7769,\n  \"vi_tri_lng\": 106.7009,\n  \"vi_tri_dia_chi\": \"123 Đường ABC, Quận 1, TP.HCM\",\n  \"chi_tiet\": \"Chi tiết sự cố\",\n  \"mo_ta\": \"Mô tả ngắn\",\n  \"hinh_anh\": \"image_1.jpg\",\n  \"so_nguoi_bi_anh_huong\": 3,\n  \"muc_do_khan_cap\": \"MEDIUM\",\n  \"diem_uu_tien\": 5,\n  \"trang_thai\": \"CHO_XU_LY\"\n}"},
             "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho"]}
           }
         },
@@ -339,7 +339,7 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"muc_do_khan_cap\": \"HOA_HOC\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"muc_do_khan_cap\": \"HIGH\"\n}"},
             "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "1"]}
           }
         },
@@ -365,7 +365,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/theo-muc-do-khan-cap/HOA_HOC", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "theo-muc-do-khan-cap", "HOA_HOC"]}
+            "url": {"raw": "http://localhost:8000/api/yeu-cau-cuu-ho/theo-muc-do-khan-cap/MEDIUM", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "yeu-cau-cuu-ho", "theo-muc-do-khan-cap", "MEDIUM"]}
           }
         },
         {
@@ -418,7 +418,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/hang-doi-xu-ly/theo-trang-thai/CHO_XU_LY", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "hang-doi-xu-ly", "theo-trang-thai", "CHO_XU_LY"]}
+            "url": {"raw": "http://localhost:8000/api/hang-doi-xu-ly/theo-trang-thai/WAITING", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "hang-doi-xu-ly", "theo-trang-thai", "WAITING"]}
           }
         }
       ]
@@ -439,7 +439,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"phan_loai_chinh\": \"Cứu hộ cháy\",\n  \"do_tin_cay\": \"0.95\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"so_nguoi\": 3,\n  \"ten_loai_su_co\": \"Cháy\",\n  \"muc_tu_bao_cao\": 0.7,\n  \"thoi_gian_cho\": 10,\n  \"diem_uu_tien\": 8,\n  \"muc_khan_cap\": 4,\n  \"do_tin_cay\": 95,\n  \"ly_do\": \"AI đánh giá mức độ ưu tiên cao\",\n  \"model_version\": \"v1\"\n}"},
             "url": {"raw": "http://localhost:8000/api/phan-loai-ais/1/tao-phan-loai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-loai-ais", "1", "tao-phan-loai"]}
           }
         }
@@ -469,7 +469,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_doi_cuu_ho\": \"Đội cứu hộ 01\",\n  \"khu_vuc\": \"Quận 1\",\n  \"trang_thai\": 1,\n  \"da_san_sang\": 1\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"ten_co\": \"Đội cứu hộ 01\",\n  \"khu_vuc_quan_ly\": \"Quận 1\",\n  \"so_dien_thoai_hotline\": \"0801111111\",\n  \"vi_tri_lat\": 10.7769,\n  \"vi_tri_lng\": 106.7009,\n  \"trang_thai\": 1,\n  \"mo_ta\": \"Đội cứu hộ khu vực Quận 1\"\n}"},
             "url": {"raw": "http://localhost:8000/api/doi-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho"]}
           }
         },
@@ -478,7 +478,7 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_doi_cuu_ho\": \"Đội cứu hộ 01 updated\",\n  \"khu_vuc\": \"Quận 2\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"ten_co\": \"Đội cứu hộ 01 updated\",\n  \"khu_vuc_quan_ly\": \"Quận 2\"\n}"},
             "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1"]}
           }
         },
@@ -487,7 +487,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/thanh-vien", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "thanh-vien"]}
+            "url": {"raw": "http://localhost:8000/api/get-doi-cuu-ho/1/thanh-vien", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-doi-cuu-ho", "1", "thanh-vien"]}
           }
         },
         {
@@ -496,7 +496,7 @@
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {"mode": "raw", "raw": "{\n  \"id_nguoi_dung\": 1,\n  \"vai_tro\": \"Trưởng đội\"\n}"},
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/thanh-vien", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "thanh-vien"]}
+            "url": {"raw": "http://localhost:8000/api/post-doi-cuu-ho/1/thanh-vien", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "post-doi-cuu-ho", "1", "thanh-vien"]}
           }
         },
         {
@@ -504,7 +504,7 @@
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/thanh-vien/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "thanh-vien", "1"]}
+            "url": {"raw": "http://localhost:8000/api/delete-doi-cuu-ho/1/thanh-vien/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "delete-doi-cuu-ho", "1", "thanh-vien", "1"]}
           }
         },
         {
@@ -512,7 +512,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/tai-nguyen", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "tai-nguyen"]}
+            "url": {"raw": "http://localhost:8000/api/get-doi-cuu-ho/1/tai-nguyen", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-doi-cuu-ho", "1", "tai-nguyen"]}
           }
         },
         {
@@ -521,7 +521,7 @@
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {"mode": "raw", "raw": "{\n  \"ten_tai_nguyen\": \"Xe cứu hộ\",\n  \"loai_tai_nguyen\": \"XE\",\n  \"so_luong\": 2,\n  \"trang_thai\": 1\n}"},
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/tai-nguyen", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "tai-nguyen"]}
+            "url": {"raw": "http://localhost:8000/api/post-doi-cuu-ho/1/tai-nguyen", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "post-doi-cuu-ho", "1", "tai-nguyen"]}
           }
         },
         {
@@ -530,7 +530,7 @@
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {"mode": "raw", "raw": "{\n  \"so_luong\": 3\n}"},
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/tai-nguyen/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "tai-nguyen", "1"]}
+            "url": {"raw": "http://localhost:8000/api/put-doi-cuu-ho/1/tai-nguyen/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "put-doi-cuu-ho", "1", "tai-nguyen", "1"]}
           }
         },
         {
@@ -538,7 +538,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/vi-tri", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "vi-tri"]}
+            "url": {"raw": "http://localhost:8000/api/get-doi-cuu-ho/1/vi-tri", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-doi-cuu-ho", "1", "vi-tri"]}
           }
         },
         {
@@ -546,8 +546,8 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_vi_tri\": \"Trạm cứu hộ quận 1\",\n  \"dia_chi\": \"123 Đường ABC\",\n  \"vi_do\": \"10.7769\",\n  \"kinh_do\": \"106.6869\"\n}"},
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/vi-tri", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "vi-tri"]}
+            "body": {"mode": "raw", "raw": "{\n  \"vi_tri_lat\": 10.7769,\n  \"vi_tri_lng\": 106.6869\n}"},
+            "url": {"raw": "http://localhost:8000/api/post-doi-cuu-ho/1/vi-tri", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "post-doi-cuu-ho", "1", "vi-tri"]}
           }
         },
         {
@@ -555,7 +555,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/nang-luc", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "nang-luc"]}
+            "url": {"raw": "http://localhost:8000/api/get-doi-cuu-ho/1/nang-luc", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-doi-cuu-ho", "1", "nang-luc"]}
           }
         },
         {
@@ -563,8 +563,8 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"so_nhan_su_toi_da\": \"20\",\n  \"thoi_gian_phan_ung_trung_binh\": \"15\"\n}"},
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/nang-luc", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "nang-luc"]}
+            "body": {"mode": "raw", "raw": "{\n  \"so_viec_dang_xu_ly\": 1,\n  \"so_viec_toi_da\": 3,\n  \"ty_le_hoan_thanh\": 95,\n  \"thoi_gian_xu_ly_tb\": 20\n}"},
+            "url": {"raw": "http://localhost:8000/api/put-doi-cuu-ho/1/nang-luc", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "put-doi-cuu-ho", "1", "nang-luc"]}
           }
         },
         {
@@ -572,7 +572,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/doi-cuu-ho/1/loai-su-co-dung-xu-ly", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho", "1", "loai-su-co-dung-xu-ly"]}
+            "url": {"raw": "http://localhost:8000/api/get-doi-cuu-ho/1/loai-su-co-dung-xu-ly", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-doi-cuu-ho", "1", "loai-su-co-dung-xu-ly"]}
           }
         },
         {
@@ -633,7 +633,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"id_yeu_cau_cuu_ho\": 1,\n  \"id_doi_cuu_ho\": 1,\n  \"thoi_gian_phan_cong\": \"2026-03-17 10:30:00\",\n  \"trang_thai\": \"CHO_XU_LY\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"id_yeu_cau\": 1,\n  \"id_doi_cuu_ho\": 1,\n  \"mo_ta\": \"Phân công xử lý\",\n  \"thoi_gian_phan_cong\": \"2026-03-17 10:30:00\",\n  \"trang_thai_nhiem_vu\": \"CHO_XU_LY\"\n}"},
             "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho"]}
           }
         },
@@ -642,7 +642,7 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"trang_thai\": \"DANG_XU_LY\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"trang_thai_nhiem_vu\": \"DANG_XU_LY\"\n}"},
             "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "1"]}
           }
         },
@@ -651,7 +651,7 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"trang_thai\": \"HOAN_THANH\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"trang_thai_nhiem_vu\": \"HOAN_THANH\"\n}"},
             "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/1/trang-thai", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "1", "trang-thai"]}
           }
         },
@@ -676,7 +676,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/theo-trang-thai/CHO_XU_LY", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "theo-trang-thai", "CHO_XU_LY"]}
+            "url": {"raw": "http://localhost:8000/api/phan-cong-cuu-ho/theo-trang-thai/DANG_XU_LY", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "phan-cong-cuu-ho", "theo-trang-thai", "DANG_XU_LY"]}
           }
         },
         {
@@ -713,8 +713,8 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ket_qua_xu_ly\": \"Thành công\",\n  \"ghi_chu\": \"Xử lý bình thường\",\n  \"thoi_gian_ket_thuc\": \"2026-03-17 11:30:00\"\n}"},
-            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/phan-cong/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "phan-cong", "1"]}
+            "body": {"mode": "raw", "raw": "{\n  \"bao_cao_hien_truong\": \"Báo cáo hiện trường: đã xử lý xong\",\n  \"trang_thai_ket_qua\": \"HOAN_THANH\",\n  \"hinh_anh_minh_chung\": \"result_image.jpg\",\n  \"thoi_gian_ket_thuc\": \"2026-03-17 11:30:00\"\n}"},
+            "url": {"raw": "http://localhost:8000/api/post-ket-qua-cuu-ho/phan-cong/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "post-ket-qua-cuu-ho", "phan-cong", "1"]}
           }
         },
         {
@@ -722,7 +722,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/phan-cong/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "phan-cong", "1"]}
+            "url": {"raw": "http://localhost:8000/api/get-ket-qua-cuu-ho/phan-cong/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-ket-qua-cuu-ho", "phan-cong", "1"]}
           }
         },
         {
@@ -730,7 +730,7 @@
           "request": {
             "method": "PUT",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ket_qua_xu_ly\": \"Thành công (cập nhật)\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"bao_cao_hien_truong\": \"Báo cáo hiện trường (cập nhật)\",\n  \"trang_thai_ket_qua\": \"HOAN_THANH\"\n}"},
             "url": {"raw": "http://localhost:8000/api/ket-qua-cuu-ho/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "ket-qua-cuu-ho", "1"]}
           }
         }
@@ -769,7 +769,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho", "yeu-cau", "1"]}
+            "url": {"raw": "http://localhost:8000/api/get-danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "get-danh-gia-cuu-ho", "yeu-cau", "1"]}
           }
         },
         {
@@ -778,7 +778,7 @@
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {"mode": "raw", "raw": "{\n  \"id_nguoi_dung\": 1,\n  \"diem_danh_gia\": 4,\n  \"noi_dung_danh_gia\": \"Xử lý tốt nhưng hơi chậm\"\n}"},
-            "url": {"raw": "http://localhost:8000/api/danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "danh-gia-cuu-ho", "yeu-cau", "1"]}
+            "url": {"raw": "http://localhost:8000/api/post-danh-gia-cuu-ho/yeu-cau/1", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "post-danh-gia-cuu-ho", "yeu-cau", "1"]}
           }
         }
       ]

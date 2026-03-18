@@ -26,13 +26,16 @@ class NguoiDungSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
-            NguoiDung::create([
-                'ho_ten' => $user['ho_ten'],
-                'so_dien_thoai' => $user['sdt'],
-                'email' => $user['email'],
-                'mat_khau' => bcrypt('user123'),
-                'trang_thai' => 1
-            ]);
+            NguoiDung::updateOrCreate(
+                ['email' => $user['email']],
+                [
+                    'ho_ten' => $user['ho_ten'],
+                    'so_dien_thoai' => $user['sdt'],
+                    'email' => $user['email'],
+                    'mat_khau' => bcrypt('user123'),
+                    'trang_thai' => 1
+                ]
+            );
         }
 
         echo "✅ Người Dùng Seeding: 10 người dùng\n";
