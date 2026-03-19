@@ -8,7 +8,7 @@ class DoiCuuHo extends Model
 {
     protected $table = 'doi_cuu_ho';
     protected $primaryKey = 'id_doi_cuu_ho';
-    protected $fillable = ['ten_co', 'khu_vuc_quan_ly', 'so_dien_thoai_hotline', 'vi_tri_lat', 'vi_tri_lng', 'trang_thai', 'mo_ta'];
+    protected $fillable = ['ten_co', 'khu_vuc_quan_ly', 'so_dien_thoai_hotline', 'vi_tri_lat', 'vi_tri_lng', 'id_ket_qua', 'trang_thai', 'mo_ta'];
 
     public function thanhViens()
     {
@@ -38,5 +38,10 @@ class DoiCuuHo extends Model
     public function phanCongs()
     {
         return $this->hasMany(PhanCongCuuHo::class, 'id_doi_cuu_ho', 'id_doi_cuu_ho');
+    }
+
+    public function ketQua()
+    {
+        return $this->belongsTo(KetQuaCuuHo::class, 'id_ket_qua', 'id_ket_qua');
     }
 }

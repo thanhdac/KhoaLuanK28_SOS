@@ -17,4 +17,9 @@ class KetQuaCuuHo extends Model
     {
         return $this->belongsTo(PhanCongCuuHo::class, 'id_phan_cong', 'id_phan_cong');
     }
+
+    public function doiCuuHo()
+    {
+        return $this->hasOne(DoiCuuHo::class, 'id_ket_qua', 'id_ket_qua');
+    }
 }

@@ -31,9 +31,9 @@ class YeuCauCuuHoRequest extends FormRequest
             'mo_ta' => 'nullable|string',
             'hinh_anh' => 'nullable|string',
             'so_nguoi_bi_anh_huong' => 'nullable|integer|min:1',
-            'muc_do_khan_cap' => 'required|integer|min:1|max:5',
-            'diem_uu_tien' => 'nullable|integer',
-            'trang_thai' => 'required|integer',
+            'muc_do_khan_cap' => 'nullable|string|max:20',
+            'diem_uu_tien' => 'nullable|numeric',
+            'trang_thai' => 'nullable|string|max:30',
         ];
     }
 
@@ -52,12 +52,7 @@ class YeuCauCuuHoRequest extends FormRequest
             'vi_tri_dia_chi.max' => 'Địa chỉ không được quá 500 ký tự',
             'so_nguoi_bi_anh_huong.integer' => 'Số người phải là số nguyên',
             'so_nguoi_bi_anh_huong.min' => 'Số người phải lớn hơn hoặc bằng 1',
-            'muc_do_khan_cap.required' => 'Mức độ khẩn cấp không được để trống',
-            'muc_do_khan_cap.integer' => 'Mức độ khẩn cấp phải là số nguyên',
-            'muc_do_khan_cap.min' => 'Mức độ khẩn cấp phải từ 1 đến 5',
-            'muc_do_khan_cap.max' => 'Mức độ khẩn cấp phải từ 1 đến 5',
-            'trang_thai.required' => 'Trạng thái không được để trống',
-            'trang_thai.integer' => 'Trạng thái phải là số nguyên',
+            'diem_uu_tien.numeric' => 'Điểm ưu tiên phải là số',
         ];
     }
 }

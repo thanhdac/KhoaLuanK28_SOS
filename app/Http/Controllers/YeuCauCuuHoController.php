@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\DB;
 
 class YeuCauCuuHoController extends Controller
 {
+    private function urgencyToNumber($value): float
+    {
+        if ($value === null || $value === '') {
+            return 0;
+        }
+
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+
+        $v = strtoupper(trim((string) $value));
+        return match ($v) {
+            'LOW' => 1,
+            'MEDIUM' => 2,
+            'HIGH' => 3,
+            'CRITICAL' => 4,
+            default => 0,
+        };
+    }
+
     private function normalizeTrangThaiYeuCau(?string $value): ?string
     {
         if ($value === null) {
@@ -710,10 +730,12 @@ class YeuCauCuuHoController extends Controller
 
             // Generate density data
             $densityData = $heatmapData->map(function ($item) {
+                $urgency = $this->urgencyToNumber($item->muc_do_khan_cap);
+                $priority = is_numeric($item->diem_uu_tien) ? (float) $item->diem_uu_tien : 0;
                 return [
                     'lat' => floatval($item->vi_tri_lat),
                     'lng' => floatval($item->vi_tri_lng),
-                    'intensity' => $item->muc_do_khan_cap + $item->diem_uu_tien / 100,
+                    'intensity' => $urgency + $priority / 100,
                     'status' => $item->trang_thai
                 ];
             });
@@ -945,24 +967,27 @@ class YeuCauCuuHoController extends Controller
     public function getProcessingStatus(Request $request)
     {
         try {
-            $query = YeuCauCuuHo::query();
+            $baseQuery = YeuCauCuuHo::query();
 
             if ($request->has('from_date') && $request->has('to_date')) {
-                $query->whereBetween('created_at', [
+                $baseQuery->whereBetween('created_at', [
                     $request->get('from_date'),
                     $request->get('to_date')
                 ]);
             }
 
-            $total = $query->count();
-            $new = $query->where('trang_thai', 'CHO_XU_LY')->count();
-            $processing = $query->where('trang_thai', 'DANG_XU_LY')->count();
-            $completed = $query->where('trang_thai', 'HOAN_THANH')->count();
-            $cancelled = $query->where('trang_thai', 'HUY_BO')->count();
+            $total = (clone $baseQuery)->count();
+            $new = (clone $baseQuery)->where('trang_thai', 'CHO_XU_LY')->count();
+            $processing = (clone $baseQuery)->where('trang_thai', 'DANG_XU_LY')->count();
+            $completed = (clone $baseQuery)->where('trang_thai', 'HOAN_THANH')->count();
+            $cancelled = (clone $baseQuery)->where('trang_thai', 'HUY_BO')->count();
 
-            $avgUrgency = $query->avg('muc_do_khan_cap') ?? 0;
-            $avgAffectedPeople = $query->avg('so_nguoi_bi_anh_huong') ?? 0;
-            $totalAffectedPeople = $query->sum('so_nguoi_bi_anh_huong') ?? 0;
+            $urgencies = (clone $baseQuery)->pluck('muc_do_khan_cap');
+            $urgencyAvg = $urgencies->count() > 0
+                ? $urgencies->map(fn ($v) => $this->urgencyToNumber($v))->avg()
+                : 0;
+            $avgAffectedPeople = (clone $baseQuery)->avg('so_nguoi_bi_anh_huong') ?? 0;
+            $totalAffectedPeople = (clone $baseQuery)->sum('so_nguoi_bi_anh_huong') ?? 0;
 
             return Response::json([
                 'success' => true,
@@ -974,7 +999,7 @@ class YeuCauCuuHoController extends Controller
                     'completed' => $completed,
                     'cancelled' => $cancelled,
                     'completion_rate' => $total > 0 ? round(($completed / $total) * 100, 2) : 0,
-                    'avg_urgency' => round($avgUrgency, 2),
+                    'avg_urgency' => round($urgencyAvg, 2),
                     'avg_affected_people' => round($avgAffectedPeople, 2),
                     'total_affected_people' => $totalAffectedPeople
                 ]

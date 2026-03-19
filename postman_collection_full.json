@@ -469,7 +469,7 @@
           "request": {
             "method": "POST",
             "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"ten_co\": \"Đội cứu hộ 01\",\n  \"khu_vuc_quan_ly\": \"Quận 1\",\n  \"so_dien_thoai_hotline\": \"0801111111\",\n  \"vi_tri_lat\": 10.7769,\n  \"vi_tri_lng\": 106.7009,\n  \"trang_thai\": 1,\n  \"mo_ta\": \"Đội cứu hộ khu vực Quận 1\"\n}"},
+            "body": {"mode": "raw", "raw": "{\n  \"ten_co\": \"Đội cứu hộ 01\",\n  \"khu_vuc_quan_ly\": \"Quận 1\",\n  \"so_dien_thoai_hotline\": \"0801111111\",\n  \"vi_tri_lat\": 10.7769,\n  \"vi_tri_lng\": 106.7009,\n  \"trang_thai\": \"SAN_SANG\",\n  \"mo_ta\": \"Đội cứu hộ khu vực Quận 1\"\n}"},
             "url": {"raw": "http://localhost:8000/api/doi-cuu-ho", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["api", "doi-cuu-ho"]}
           }
         },

@@ -23,9 +23,9 @@ class HangDoiXuLyRequest extends FormRequest
     {
         return [
             'id_yeu_cau' => 'required|exists:yeu_cau_cuu_ho,id_yeu_cau',
-            'diem_uu_tien' => 'nullable|integer',
-            'muc_khan_cap' => 'required|integer|min:1|max:5',
-            'trang_thai' => 'required|integer',
+            'diem_uu_tien' => 'nullable|numeric',
+            'muc_khan_cap' => 'nullable|string|max:20',
+            'trang_thai' => 'required|string|max:20',
         ];
     }
 
@@ -34,13 +34,9 @@ class HangDoiXuLyRequest extends FormRequest
         return [
             'id_yeu_cau.required' => 'Yêu cầu cứu hộ không được để trống',
             'id_yeu_cau.exists' => 'Yêu cầu cứu hộ không tồn tại',
-            'diem_uu_tien.integer' => 'Điểm ưu tiên phải là số nguyên',
-            'muc_khan_cap.required' => 'Mức khẩn cấp không được để trống',
-            'muc_khan_cap.integer' => 'Mức khẩn cấp phải là số nguyên',
-            'muc_khan_cap.min' => 'Mức khẩn cấp phải từ 1 đến 5',
-            'muc_khan_cap.max' => 'Mức khẩn cấp phải từ 1 đến 5',
+            'diem_uu_tien.numeric' => 'Điểm ưu tiên phải là số',
             'trang_thai.required' => 'Trạng thái không được để trống',
-            'trang_thai.integer' => 'Trạng thái phải là số nguyên',
+            'trang_thai.string' => 'Trạng thái phải là chuỗi',
         ];
     }
 }

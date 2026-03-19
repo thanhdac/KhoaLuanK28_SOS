@@ -48,7 +48,7 @@ class DoiCuuHoController extends Controller
                 'so_dien_thoai_hotline' => 'nullable|string|max:20',
                 'vi_tri_lat' => 'nullable|numeric',
                 'vi_tri_lng' => 'nullable|numeric',
-                'trang_thai' => 'nullable|integer|in:0,1',
+                'trang_thai' => 'nullable|string|max:30',
                 'mo_ta' => 'nullable|string'
             ]);
 
@@ -115,7 +115,7 @@ class DoiCuuHoController extends Controller
                 'so_dien_thoai_hotline' => 'nullable|string|max:20',
                 'vi_tri_lat' => 'nullable|numeric',
                 'vi_tri_lng' => 'nullable|numeric',
-                'trang_thai' => 'nullable|integer|in:0,1',
+                'trang_thai' => 'nullable|string|max:30',
                 'mo_ta' => 'nullable|string'
             ]);
 
@@ -715,7 +715,7 @@ class DoiCuuHoController extends Controller
     public function getAvailableTeams(Request $request)
     {
         try {
-            $items = DoiCuuHo::where('trang_thai', 1)
+            $items = DoiCuuHo::where('trang_thai', 'SAN_SANG')
                 ->with(['thanhViens', 'taiNguyens', 'nangLuc', 'phanCongs'])
                 ->get()
                 ->filter(function ($team) {

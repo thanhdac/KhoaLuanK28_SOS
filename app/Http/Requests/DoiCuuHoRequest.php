@@ -27,7 +27,7 @@ class DoiCuuHoRequest extends FormRequest
             'so_dien_thoai_hotline' => 'required|digits:10|unique:doi_cuu_ho,so_dien_thoai_hotline',
             'vi_tri_lat' => 'required|numeric',
             'vi_tri_lng' => 'required|numeric',
-            'trang_thai' => 'required|integer',
+            'trang_thai' => 'required|string|max:30',
             'mo_ta' => 'nullable|string',
         ];
     }
@@ -47,7 +47,7 @@ class DoiCuuHoRequest extends FormRequest
             'vi_tri_lng.required' => 'Vị trí longitude không được để trống',
             'vi_tri_lng.numeric' => 'Vị trí longitude phải là số',
             'trang_thai.required' => 'Trạng thái không được để trống',
-            'trang_thai.integer' => 'Trạng thái phải là số nguyên',
+            'trang_thai.string' => 'Trạng thái phải là chuỗi',
         ];
     }
 }

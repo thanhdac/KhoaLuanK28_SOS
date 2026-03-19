@@ -8,7 +8,7 @@ class YeuCauCuuHo extends Model
 {
     protected $table = 'yeu_cau_cuu_ho';
     protected $primaryKey = 'id_yeu_cau';
-    protected $fillable = ['id_nguoi_dung', 'id_loai_su_co', 'vi_tri_lat', 'vi_tri_lng', 'vi_tri_dia_chi', 'chi_tiet', 'mo_ta', 'hinh_anh', 'so_nguoi_bi_anh_huong', 'muc_do_khan_cap', 'diem_uu_tien', 'trang_thai'];
+    protected $fillable = ['id_nguoi_dung', 'id_loai_su_co', 'vi_tri_lat', 'vi_tri_lng', 'vi_tri_dia_chi', 'chi_tiet', 'mo_ta', 'hinh_anh', 'so_nguoi_bi_anh_huong', 'muc_do_khan_cap', 'diem_uu_tien', 'trang_thai', 'thoi_gian_gui'];
 
     /**
      * Relationship with NguoiDung (User)
