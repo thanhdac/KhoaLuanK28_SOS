@@ -6,9 +6,55 @@ use App\Models\{DoiCuuHo, ThanhVienDoi, TaiNguyenCuuHo, ViTriDoiCuuHo, NangLucDo
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class DoiCuuHoController extends Controller
 {
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'mat_khau' => 'required',
+        ]);
+
+        $user = DoiCuuHo::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->mat_khau, $user->mat_khau)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tài khoản sai email hoặc password',
+            ], 401);
+        }
+
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Đăng nhập thành công',
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'data' => $user->load(['thanhViens', 'taiNguyens', 'viTris', 'nangLuc', 'loaiSuCos']),
+        ]);
+    }
+
+    public function checkThanhVien()
+    {
+        $user = Auth::guard('sanctum')->user();
+        if ($user) {
+            return response()->json([
+                'status' => true,
+                'ho_ten' => $user->ho_va_ten,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bạn không có quyền truy cập.',
+            ]);
+        }
+    }
+
     /**
      * Display paginated list of all rescue teams
      */

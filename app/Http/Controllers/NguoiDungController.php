@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\NguoiDung;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class NguoiDungController extends Controller
 {
@@ -11,49 +14,83 @@ class NguoiDungController extends Controller
 
     public function login(Request $request)
     {
-        $check = NguoiDung::where('email', $request->email)
-            ->where('mat_khau', $request->mat_khau)->first();
+        $request->validate([
+            'email' => 'required|email',
+            'mat_khau' => 'required',
+        ]);
 
-        if ($check) {
+        $user = NguoiDung::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->mat_khau, $user->mat_khau)) {
             return response()->json([
-                'status'    => true,
-                'message'   => 'Đăng nhập thành công',
-                'data'      => $check,
-            ]);
-        } else {
-            return response()->json([
-                'status'    => false,
-                'message'   => 'Tài khoản sai email hoặc password',
-            ]);
+                'status' => false,
+                'message' => 'Tài khoản sai email hoặc password',
+            ], 401);
         }
+
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Đăng nhập thành công',
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'data' => $user,
+        ]);
     }
 
     public function register(Request $request)
     {
         $request->validate([
-            'so_dien_thoai' => 'required|string|regex:/^0\d{9,10}$/',
-            'email'         => 'required|email|unique:nguoi_dung,email',
+            'ho_ten' => 'required|string|max:255',
+            'so_dien_thoai' => 'required|digits:10|regex:/^0\d+$/',
+
+            'email' => 'required|email|unique:nguoi_dung,email',
+            'mat_khau' => 'required|string|min:6',
         ], [
-            'so_dien_thoai.required'  => 'Vui lòng nhập số điện thoại.',
-            'so_dien_thoai.regex'     => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (bắt đầu bằng 0, có 10 hoặc 11 số).',
-            'email.required'          => 'Vui lòng nhập email.',
-            'email.email'             => 'Email không đúng định dạng.',
-            'email.unique'            => 'Email đã tồn tại trong hệ thống.',
+            'ho_ten.required' => 'Vui lòng nhập họ và tên.',
+            'so_dien_thoai.required' => 'Vui lòng nhập số điện thoại.',
+            'so_dien_thoai.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (bắt đầu bằng 0, có 10 số).',
+            'so_dien_thoai.max' => 'Số điện thoại không được vượt quá 10 ký tự.',
+
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email đã tồn tại trong hệ thống.',
+            'mat_khau.required' => 'Vui lòng nhập mật khẩu.',
+            'mat_khau.min' => 'Mật khẩu tối thiểu 6 ký tự.',
         ]);
 
         $nguoiDung = new NguoiDung();
         $nguoiDung->ho_ten = $request->ho_ten;
         $nguoiDung->email = $request->email;
         $nguoiDung->so_dien_thoai = $request->so_dien_thoai;
-        $nguoiDung->mat_khau = $request->mat_khau;
+        $nguoiDung->mat_khau = Hash::make($request->mat_khau);
         $nguoiDung->trang_thai = 1;
+
         $nguoiDung->save();
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Đăng ký thành công',
-            'data'      => $nguoiDung,
-        ]);
+            'status' => true,
+            'message' => 'Đăng ký thành công',
+            'data' => $nguoiDung,
+        ], 201);
+    }
+
+    public function checkClient()
+    {
+        $user = Auth::guard('sanctum')->user();
+        if ($user) {
+            return response()->json([
+                'status' => true,
+                'ho_ten' => $user->ho_ten,
+                'email' => $user->email
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Vui lòng đăng nhập để sử dụng.',
+            ]);
+        }
     }
 
     // ===== USERS CRUD =====
@@ -79,7 +116,7 @@ class NguoiDungController extends Controller
             'ho_ten'        => $request->ho_ten,
             'email'         => $request->email,
             'so_dien_thoai' => $request->so_dien_thoai,
-            'mat_khau'      => $request->mat_khau ?? '123456',
+            'mat_khau'      => Hash::make($request->mat_khau ?? '123456'),
             'trang_thai'    => $request->trang_thai ?? 1,
         ]);
 
@@ -121,7 +158,7 @@ class NguoiDungController extends Controller
         $updateData = [
             'ho_ten'        => $request->ho_ten ?? $user->ho_ten,
             'email'         => $request->email ?? $user->email,
-            'mat_khau'      => $request->mat_khau ?? $user->mat_khau,
+            'mat_khau'      => $request->has('mat_khau') ? Hash::make($request->mat_khau) : $user->mat_khau,
             'so_dien_thoai' => $request->so_dien_thoai ?? $user->so_dien_thoai,
             'trang_thai'    => $request->trang_thai ?? $user->trang_thai,
         ];

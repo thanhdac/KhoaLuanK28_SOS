@@ -12,6 +12,7 @@ use App\Http\Controllers\DoiCuuHoController;
 use App\Http\Controllers\PhanCongCuuHoController;
 use App\Http\Controllers\KetQuaCuuHoController;
 use App\Http\Controllers\DanhGiaCuuHoController;
+use App\Http\Controllers\ThanhVienDoiController;
 
 // =========================================
 // PHÂN QUYỀN & QUẢN TRỊ
@@ -27,27 +28,50 @@ Route::apiResource('chuc-vu', ChucVuController::class);
 // ADMIN MANAGEMENT
 // =========================================
 Route::post('admin/login', [AdminController::class, 'login']);
-Route::get('admin/list', [AdminController::class, 'index']);
-Route::get('admin/chi-tiet/{id}', [AdminController::class, 'show']);
-Route::post('admin/create', [AdminController::class, 'store']);
-Route::put('admin/update/{id}', [AdminController::class, 'update']);
-Route::delete('admin/delete/{id}', [AdminController::class, 'destroy']);
-Route::get('admin/search', [AdminController::class, 'search']);
-Route::put('admin/change-status/{id}', [AdminController::class, 'changeStatus']);
-Route::put('admin/active/{id}', [AdminController::class, 'active']);
+Route::get('/admin/check-token', [AdminController::class, 'checkAdmin']);
+
+
+Route::middleware(['auth:sanctum', 'check.admin'])->group(function () {
+    Route::get('admin/list', [AdminController::class, 'index']);
+    Route::get('admin/chi-tiet/{id}', [AdminController::class, 'show']);
+    Route::post('admin/create', [AdminController::class, 'store']);
+    Route::put('admin/update/{id}', [AdminController::class, 'update']);
+    Route::delete('admin/delete/{id}', [AdminController::class, 'destroy']);
+    Route::get('admin/search', [AdminController::class, 'search']);
+    Route::put('admin/change-status/{id}', [AdminController::class, 'changeStatus']);
+    Route::put('admin/active/{id}', [AdminController::class, 'active']);
+});
 
 // =========================================
 // NGƯỜI DÙNG (USERS)
 // =========================================
 Route::post('nguoi-dung/login', [NguoiDungController::class, 'login']);
 Route::post('nguoi-dung/register', [NguoiDungController::class, 'register']);
-Route::get('nguoi-dung/list', [NguoiDungController::class, 'index']);
-Route::get('nguoi-dung/chi-tiet/{id}', [NguoiDungController::class, 'show']);
-Route::post('nguoi-dung/create', [NguoiDungController::class, 'store']);
-Route::put('nguoi-dung/update/{id}', [NguoiDungController::class, 'update']);
-Route::delete('nguoi-dung/delete/{id}', [NguoiDungController::class, 'destroy']);
-Route::get('nguoi-dung/search', [NguoiDungController::class, 'search']);
-Route::put('nguoi-dung/change-status/{id}', [NguoiDungController::class, 'changeStatus']);
+Route::get('/nguoi-dung/check-client', [NguoiDungController::class, 'checkClient']);
+
+
+Route::middleware(['auth:sanctum', 'check.admin'])->group(function () {
+    Route::get('nguoi-dung/list', [NguoiDungController::class, 'index']);
+    Route::get('nguoi-dung/chi-tiet/{id}', [NguoiDungController::class, 'show']);
+    Route::post('nguoi-dung/create', [NguoiDungController::class, 'store']);
+    Route::put('nguoi-dung/update/{id}', [NguoiDungController::class, 'update']);
+    Route::delete('nguoi-dung/delete/{id}', [NguoiDungController::class, 'destroy']);
+    Route::get('nguoi-dung/search', [NguoiDungController::class, 'search']);
+    Route::put('nguoi-dung/change-status/{id}', [NguoiDungController::class, 'changeStatus']);
+});
+
+// =========================================
+// THANH VIÊN ĐỘI CỨU HỘ (RESCUE TEAM MEMBERS)
+// =========================================
+Route::post('thanh-vien-doi/login', [ThanhVienDoiController::class, 'login']);
+
+Route::middleware(['auth:sanctum', 'check.admin'])->group(function () {
+    Route::get('thanh-vien-doi/list', [ThanhVienDoiController::class, 'index']);
+    Route::post('thanh-vien-doi/create', [ThanhVienDoiController::class, 'store']);
+    Route::put('thanh-vien-doi/update/{id}', [ThanhVienDoiController::class, 'update']);
+    Route::delete('thanh-vien-doi/delete/{id}', [ThanhVienDoiController::class, 'destroy']);
+    Route::put('thanh-vien-doi/change-status/{id}', [ThanhVienDoiController::class, 'updateStatus']);
+});
 
 // =========================================
 // PHÂN LOẠI SỰ CỐ
@@ -90,6 +114,8 @@ Route::post('phan-loai-ais/{id_yeu_cau}/tao-phan-loai', [YeuCauCuuHoController::
 Route::apiResource('doi-cuu-ho', DoiCuuHoController::class);
 
 // Đội cứu hộ - Advanced operations
+Route::post('doi-cuu-ho/login', [DoiCuuHoController::class, 'login']);
+Route::get('/doi-cuu-ho/check-token', [DoiCuuHoController::class, 'checkThanhVien']);
 Route::get('get-doi-cuu-ho/{id}/thanh-vien', [DoiCuuHoController::class, 'getThanhVien']);
 Route::post('post-doi-cuu-ho/{id}/thanh-vien', [DoiCuuHoController::class, 'addThanhVien']);
 Route::delete('delete-doi-cuu-ho/{id}/thanh-vien/{id_thanh_vien}', [DoiCuuHoController::class, 'removeThanhVien']);

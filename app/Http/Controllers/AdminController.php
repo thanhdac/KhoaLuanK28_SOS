@@ -7,6 +7,9 @@ use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
 use App\Models\PhanQuyen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
@@ -14,19 +17,43 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
-        $check = Admin::where('email', $request->email)
-            ->where('mat_khau', $request->mat_khau)->first();
+        $request->validate([
+            'email' => 'required|email',
+            'mat_khau' => 'required',
+        ]);
 
-        if ($check) {
+        $user = Admin::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->mat_khau, $user->mat_khau)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tài khoản sai email hoặc password',
+            ], 401);
+        }
+
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Đăng nhập thành công',
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'data' => $user->load('chucVu'),
+        ]);
+    }
+
+    public function checkAdmin()
+    {
+        $user = Auth::guard('sanctum')->user();
+        if ($user) {
             return response()->json([
                 'status' => true,
-                'message' => 'Đăng nhập thành công',
-                'data' => $check,
+                'ho_ten' => $user->ho_va_ten,
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Tài khoản sai email hoặc password',
+                'message' => 'Bạn không có quyền truy cập.',
             ]);
         }
     }
@@ -35,7 +62,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        $data = Admin::get();
+        $data = Admin::with('chucVu')->get();
         return response()->json([
             'status'    => true,
             'data'      => $data,
@@ -47,7 +74,7 @@ class AdminController extends Controller
         $admin = Admin::create([
             'ho_ten'        => $request->ho_ten,
             'email'         => $request->email,
-            'mat_khau'      => $request->mat_khau,
+            'mat_khau'      => Hash::make($request->mat_khau),
             'so_dien_thoai' => $request->so_dien_thoai,
             'id_chuc_vu'    => $request->id_chuc_vu,
             'trang_thai'    => $request->trang_thai ?? 1,
@@ -91,7 +118,7 @@ class AdminController extends Controller
         $updateData = [
             'ho_ten'        => $request->ho_ten ?? $admin->ho_ten,
             'email'         => $request->email ?? $admin->email,
-            'mat_khau'      => $request->mat_khau ?? $admin->mat_khau,
+            'mat_khau'      => $request->has('mat_khau') ? Hash::make($request->mat_khau) : $admin->mat_khau,
             'so_dien_thoai' => $request->so_dien_thoai ?? $admin->so_dien_thoai,
             'id_chuc_vu'    => $request->id_chuc_vu ?? $admin->id_chuc_vu,
             'trang_thai'    => $request->trang_thai ?? $admin->trang_thai,

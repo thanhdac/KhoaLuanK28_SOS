@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class DoiCuuHo extends Model
 {
+    use HasApiTokens;
+
     protected $table = 'doi_cuu_ho';
     protected $primaryKey = 'id_doi_cuu_ho';
-    protected $fillable = ['ten_co', 'khu_vuc_quan_ly', 'so_dien_thoai_hotline', 'vi_tri_lat', 'vi_tri_lng', 'id_ket_qua', 'trang_thai', 'mo_ta'];
+    protected $fillable = ['ten_co', 'khu_vuc_quan_ly', 'so_dien_thoai_hotline', 'vi_tri_lat', 'vi_tri_lng', 'id_ket_qua', 'trang_thai', 'mo_ta', 'email', 'mat_khau'];
+    protected $hidden = ['mat_khau'];
 
     public function thanhViens()
     {

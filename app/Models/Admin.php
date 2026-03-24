@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Admin extends Model
 {
+    use HasApiTokens;
+
     protected $table = 'admin';
     protected $primaryKey = 'id_admin';
     protected $fillable = [
@@ -14,9 +17,10 @@ class Admin extends Model
         'mat_khau',
         'so_dien_thoai',
         'id_chuc_vu',
-        'trang_thai'
+        'trang_thai',
+        'api_token',
     ];
-    protected $hidden = ['mat_khau'];
+    protected $hidden = ['mat_khau', 'api_token'];
 
     public function chucVu()
     {
