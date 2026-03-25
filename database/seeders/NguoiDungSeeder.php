@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\NguoiDung;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -32,7 +33,7 @@ class NguoiDungSeeder extends Seeder
                     'ho_ten' => $user['ho_ten'],
                     'so_dien_thoai' => $user['sdt'],
                     'email' => $user['email'],
-                    'mat_khau' => bcrypt('user123'),
+                    'mat_khau' => Hash::make('user123'),
                     'trang_thai' => 1
                 ]
             );

@@ -13,9 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'check.rescue.team' => \App\Http\Middleware\CheckRescueTeam::class,
             'check.admin' => \App\Http\Middleware\CheckAdmin::class,
-            'check.user' => \App\Http\Middleware\CheckUser::class,
+            'check.role' => \App\Http\Middleware\CheckRole::class,
+            'auth.guard' => \App\Http\Middleware\AuthGuard::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

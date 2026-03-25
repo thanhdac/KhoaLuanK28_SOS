@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ChucNangController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\AdminController;
@@ -28,10 +29,18 @@ Route::apiResource('chuc-vu', ChucVuController::class);
 // ADMIN MANAGEMENT
 // =========================================
 Route::post('admin/login', [AdminController::class, 'login']);
-Route::get('/admin/check-token', [AdminController::class, 'checkAdmin']);
-
+Route::get('/admin/check-token', [AdminController::class, 'checkAdmin']);  // No middleware - handle in controller
+Route::get('/debug/token', function (Request $request) {
+    return response()->json([
+        'token' => $request->bearerToken(),
+        'headers' => $request->headers->all(),
+        'user' => Auth::guard('sanctum')->user(),
+    ]);
+});
 
 Route::middleware(['auth:sanctum', 'check.admin'])->group(function () {
+    Route::get('admin/profile', [AdminController::class, 'getProfile']);
+    Route::post('admin/logout', [AdminController::class, 'logout']);
     Route::get('admin/list', [AdminController::class, 'index']);
     Route::get('admin/chi-tiet/{id}', [AdminController::class, 'show']);
     Route::post('admin/create', [AdminController::class, 'store']);

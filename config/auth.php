@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\NguoiDung;
+use App\Models\ThanhVienDoi;
 
 return [
 
@@ -33,7 +36,7 @@ return [
     | users are actually retrieved out of your database or other storage
     | system used by the application. Typically, Eloquent is utilized.
     |
-    | Supported: "session"
+    | Supported: "session", "sanctum"
     |
     */
 
@@ -41,6 +44,27 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+
+        // ===== SANCTUM GUARDS =====
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => null,
+        ],
+
+        'admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'admin',
+        ],
+
+        'nguoi-dung' => [
+            'driver' => 'sanctum',
+            'provider' => 'nguoi-dung',
+        ],
+
+        'thanh-vien-doi' => [
+            'driver' => 'sanctum',
+            'provider' => 'thanh-vien-doi',
         ],
     ],
 
@@ -65,6 +89,21 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => Admin::class,
+        ],
+
+        'nguoi-dung' => [
+            'driver' => 'eloquent',
+            'model' => NguoiDung::class,
+        ],
+
+        'thanh-vien-doi' => [
+            'driver' => 'eloquent',
+            'model' => ThanhVienDoi::class,
         ],
 
         // 'users' => [

@@ -6,7 +6,9 @@ use App\Http\Requests\AdminRequest;
 use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
 use App\Models\PhanQuyen;
+use App\Support\AuthHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -42,21 +44,93 @@ class AdminController extends Controller
         ]);
     }
 
-    public function checkAdmin()
+    public function checkAdmin(Request $request)
     {
-        $user = Auth::guard('sanctum')->user();
-        if ($user) {
-            return response()->json([
-                'status' => true,
-                'ho_ten' => $user->ho_va_ten,
-            ]);
-        } else {
+        // Lấy token từ header
+        $token = $request->bearerToken();
+        
+        if (!$token) {
             return response()->json([
                 'status' => false,
-                'message' => 'Bạn không có quyền truy cập.',
-            ]);
+                'message' => 'Token not provided',
+            ], 401);
         }
+
+        // Kiểm tra user từ token
+        $user = Auth::guard('sanctum')->user();
+        
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid token',
+            ], 401);
+        }
+
+        // Kiểm tra nếu không phải admin
+        if (!($user instanceof Admin)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Not an admin user',
+            ], 403);
+        }
+
+        // Kiểm tra account có active không
+        if ($user->trang_thai != 1) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Account is inactive',
+            ], 403);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Token valid',
+            'data' => [
+                'id_admin' => $user->id_admin,
+                'ho_ten' => $user->ho_ten,
+                'email' => $user->email,
+                'so_dien_thoai' => $user->so_dien_thoai,
+                'chuc_vu' => $user->chucVu?->ten_chuc_vu,
+                'trang_thai' => $user->trang_thai,
+            ],
+        ]);
     }
+
+    public function getProfile()
+    {
+        if (!AuthHelper::isAdmin()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
+        $admin = AuthHelper::user()->load('chucVu');
+
+        return response()->json([
+            'status' => true,
+            'data' => $admin,
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        if (!AuthHelper::isAdmin()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
+        $request->user('sanctum')->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Đăng xuất thành công',
+        ]);
+    }
+
+
 
     // ===== ADMIN CRUD =====
 
