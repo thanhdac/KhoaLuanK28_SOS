@@ -60,6 +60,10 @@ Route::get('/nguoi-dung/check-client', [NguoiDungController::class, 'checkClient
 
 
 Route::middleware(['auth:sanctum', 'check.admin'])->group(function () {
+
+    Route::get('/client/profile/data', [NguoiDungController::class, 'getProfile']);
+    Route::post('/client/profile/update', [NguoiDungController::class, 'updateProfile']);
+
     Route::get('nguoi-dung/list', [NguoiDungController::class, 'index']);
     Route::get('nguoi-dung/chi-tiet/{id}', [NguoiDungController::class, 'show']);
     Route::post('nguoi-dung/create', [NguoiDungController::class, 'store']);

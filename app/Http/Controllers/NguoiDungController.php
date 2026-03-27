@@ -93,6 +93,39 @@ class NguoiDungController extends Controller
         }
     }
 
+    public function getProfile()
+    {
+        $client = Auth::guard('sanctum')->user(); // lấy user từ token
+        return response()->json([
+            'status' => true,
+            'data'   => $client
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $client = Auth::guard('sanctum')->user();
+
+        if ($client) {
+            $client->update([
+                'ho_ten'     => $request->ho_ten,
+                'email'         => $request->email,
+                'so_dien_thoai' => $request->so_dien_thoai,
+            ]);
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Cập nhật thông tin thành công',
+                'data'    => $client
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Không thể cập nhật thông tin'
+        ], 400);
+    }
+
     // ===== USERS CRUD =====
 
     public function index()

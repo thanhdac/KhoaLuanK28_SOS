@@ -13,12 +13,12 @@ class DoiCuuHoSeeder extends Seeder
     public function run(): void
     {
         $teams = [
-            ['ten' => 'Đội Cứu Hộ Q1', 'khu_vuc' => 'Q1', 'lat' => 10.7800, 'lng' => 106.7050, 'sdt' => '0801111111'],
-            ['ten' => 'Đội Cứu Hộ Q3', 'khu_vuc' => 'Q3', 'lat' => 10.8000, 'lng' => 106.7100, 'sdt' => '0802222222'],
-            ['ten' => 'Đội Cứu Hộ Q5', 'khu_vuc' => 'Q5', 'lat' => 10.7700, 'lng' => 106.6800, 'sdt' => '0803333333'],
-            ['ten' => 'Đội Cứu Hộ Q7', 'khu_vuc' => 'Q7', 'lat' => 10.8300, 'lng' => 106.7200, 'sdt' => '0804444444'],
-            ['ten' => 'Đội Cứu Hộ Q11', 'khu_vuc' => 'Q11', 'lat' => 10.8500, 'lng' => 106.6900, 'sdt' => '0805555555']
-        ];
+    ['ten' => 'Đội Cứu Hộ Lũ Lụt ', 'khu_vuc' => 'Hải Châu', 'lat' => 16.0600, 'lng' => 108.2200, 'sdt' => '0901111111'],
+    ['ten' => 'Đội Cứu Nạn Sạt Lở ', 'khu_vuc' => 'Liên Chiểu', 'lat' => 16.0900, 'lng' => 108.1500, 'sdt' => '0902222222'],
+    ['ten' => 'Đội Sơ Cứu Y Tế ', 'khu_vuc' => 'Thanh Khê', 'lat' => 16.0700, 'lng' => 108.2000, 'sdt' => '0903333333'],
+    ['ten' => 'Đội Ứng Phó Bão ', 'khu_vuc' => 'Sơn Trà', 'lat' => 16.1000, 'lng' => 108.2500, 'sdt' => '0904444444'],
+    ['ten' => 'Đội Hỗ Trợ Di Dời Sơn', 'khu_vuc' => 'Ngũ Hành Sơn', 'lat' => 16.0000, 'lng' => 108.2600, 'sdt' => '0905555555']
+];
 
         foreach ($teams as $team) {
             DoiCuuHo::updateOrCreate(

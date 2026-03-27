@@ -13,14 +13,13 @@ class LoaiSuCoSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            ['ten' => 'Cháy', 'slug' => 'chay', 'mo_ta' => 'Sự cố liên quan đến Cháy'],
-            ['ten' => 'Đuối nước', 'slug' => 'suoi-nuoc', 'mo_ta' => 'Sự cố liên quan đến Đuối nước'],
-            ['ten' => 'Tai nạn giao thông', 'slug' => 'tai-nan-giao-thong', 'mo_ta' => 'Sự cố liên quan đến Tai nạn giao thông'],
-            ['ten' => 'Sập nhà', 'slug' => 'sap-nha', 'mo_ta' => 'Sự cố liên quan đến Sập nhà'],
-            ['ten' => 'Ngạch độc', 'slug' => 'ngach-doc', 'mo_ta' => 'Sự cố liên quan đến Ngạch độc'],
-            ['ten' => 'Ngộ độc', 'slug' => 'ngo-doc', 'mo_ta' => 'Sự cố liên quan đến Ngộ độc'],
-            ['ten' => 'Hiểm họa điện', 'slug' => 'hiem-hoa-dien', 'mo_ta' => 'Sự cố liên quan đến Hiểm họa điện'],
-            ['ten' => 'Thương tích', 'slug' => 'thuong-tich', 'mo_ta' => 'Sự cố liên quan đến Thương tích']
+            ['ten' => 'Lũ lụt', 'slug' => 'lu-lut', 'mo_ta' => 'Sự cố liên quan đến ngập lụt, nước dâng cao'],
+            ['ten' => 'Bão', 'slug' => 'bao', 'mo_ta' => 'Sự cố do bão gây ra như gió mạnh, sập công trình'],
+            ['ten' => 'Sạt lở đất', 'slug' => 'sat-lo-dat', 'mo_ta' => 'Sự cố liên quan đến sạt lở đất, núi'],
+            ['ten' => 'Động đất', 'slug' => 'dong-dat', 'mo_ta' => 'Sự cố do rung chấn địa chất'],
+            ['ten' => 'Sóng thần', 'slug' => 'song-than', 'mo_ta' => 'Sự cố do sóng biển dâng cao bất thường'],
+            ['ten' => 'Hạn hán', 'slug' => 'han-han', 'mo_ta' => 'Thiếu nước kéo dài, ảnh hưởng sinh hoạt'],
+            
         ];
 
         foreach ($types as $type) {
