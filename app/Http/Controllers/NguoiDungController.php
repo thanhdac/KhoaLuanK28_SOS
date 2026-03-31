@@ -4,38 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\NguoiDung;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class NguoiDungController extends Controller
 {
-    // ===== USER AUTHENTICATION =====
-
     public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
-            'mat_khau' => 'required',
+            'mat_khau' => 'nullable|string',
+            'password' => 'nullable|string',
         ]);
 
+        $password = $request->input('mat_khau', $request->input('password'));
         $user = NguoiDung::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->mat_khau, $user->mat_khau)) {
+        if (!$user || !$password) {
             return response()->json([
                 'status' => false,
-                'message' => 'Tài khoản sai email hoặc password',
+                'message' => 'Tai khoan sai email hoac password',
             ], 401);
         }
 
-        $token = $user->createToken('API Token')->plainTextToken;
+        if ($user->mat_khau === $password) {
+            $user->mat_khau = Hash::make($password);
+            $user->save();
+        }
+
+        if (!Hash::check($password, $user->mat_khau)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tai khoan sai email hoac password',
+            ], 401);
+        }
+
+        $token = $user->createToken('nguoi-dung-token')->plainTextToken;
 
         return response()->json([
             'status' => true,
-            'message' => 'Đăng nhập thành công',
+            'message' => 'Dang nhap thanh cong',
             'token' => $token,
             'token_type' => 'Bearer',
-            'data' => $user,
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -43,120 +54,116 @@ class NguoiDungController extends Controller
     {
         $request->validate([
             'ho_ten' => 'required|string|max:255',
-            'so_dien_thoai' => 'required|digits:10|regex:/^0\d+$/',
-
+            'so_dien_thoai' => 'required|string|regex:/^0\d{9,10}$/',
             'email' => 'required|email|unique:nguoi_dung,email',
             'mat_khau' => 'required|string|min:6',
-        ], [
-            'ho_ten.required' => 'Vui lòng nhập họ và tên.',
-            'so_dien_thoai.required' => 'Vui lòng nhập số điện thoại.',
-            'so_dien_thoai.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (bắt đầu bằng 0, có 10 số).',
-            'so_dien_thoai.max' => 'Số điện thoại không được vượt quá 10 ký tự.',
-
-            'email.required' => 'Vui lòng nhập email.',
-            'email.email' => 'Email không đúng định dạng.',
-            'email.unique' => 'Email đã tồn tại trong hệ thống.',
-            'mat_khau.required' => 'Vui lòng nhập mật khẩu.',
-            'mat_khau.min' => 'Mật khẩu tối thiểu 6 ký tự.',
         ]);
 
-        $nguoiDung = new NguoiDung();
-        $nguoiDung->ho_ten = $request->ho_ten;
-        $nguoiDung->email = $request->email;
-        $nguoiDung->so_dien_thoai = $request->so_dien_thoai;
-        $nguoiDung->mat_khau = Hash::make($request->mat_khau);
-        $nguoiDung->trang_thai = 1;
+        $user = new NguoiDung();
+        $user->ho_ten = $request->ho_ten;
+        $user->email = $request->email;
+        $user->so_dien_thoai = $request->so_dien_thoai;
+        $user->mat_khau = Hash::make($request->mat_khau);
+        $user->trang_thai = 1;
+        $user->save();
 
-        $nguoiDung->save();
+        $token = $user->createToken('nguoi-dung-token')->plainTextToken;
 
         return response()->json([
             'status' => true,
-            'message' => 'Đăng ký thành công',
-            'data' => $nguoiDung,
+            'message' => 'Dang ky thanh cong',
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
         ], 201);
     }
 
     public function checkClient()
     {
         $user = Auth::guard('sanctum')->user();
-        if ($user) {
-            return response()->json([
-                'status' => true,
-                'ho_ten' => $user->ho_ten,
-                'email' => $user->email
-            ]);
-        } else {
+
+        if (!$user || !($user instanceof NguoiDung)) {
             return response()->json([
                 'status' => false,
-                'message' => 'Vui lòng đăng nhập để sử dụng.',
-            ]);
+                'message' => 'Vui long dang nhap de su dung',
+            ], 401);
         }
+
+        return response()->json([
+            'status' => true,
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
+        ]);
     }
 
     public function getProfile()
     {
-        $client = Auth::guard('sanctum')->user(); // lấy user từ token
+        $user = Auth::guard('sanctum')->user();
+
+        if (!$user || !($user instanceof NguoiDung)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
         return response()->json([
             'status' => true,
-            'data'   => $client
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
     public function updateProfile(Request $request)
     {
-        $client = Auth::guard('sanctum')->user();
+        $user = Auth::guard('sanctum')->user();
 
-        if ($client) {
-            $client->update([
-                'ho_ten'     => $request->ho_ten,
-                'email'         => $request->email,
-                'so_dien_thoai' => $request->so_dien_thoai,
-            ]);
-
+        if (!$user || !($user instanceof NguoiDung)) {
             return response()->json([
-                'status'  => true,
-                'message' => 'Cập nhật thông tin thành công',
-                'data'    => $client
-            ]);
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Không thể cập nhật thông tin'
-        ], 400);
-    }
+        $user->update([
+            'ho_ten' => $request->ho_ten ?? $user->ho_ten,
+            'email' => $request->email ?? $user->email,
+            'so_dien_thoai' => $request->so_dien_thoai ?? $user->so_dien_thoai,
+        ]);
 
-    // ===== USERS CRUD =====
+        return response()->json([
+            'status' => true,
+            'message' => 'Cap nhat thong tin thanh cong',
+            'data' => $user->fresh()->makeHidden(['mat_khau', 'api_token']),
+        ]);
+    }
 
     public function index()
     {
-        $data = NguoiDung::get();
         return response()->json([
-            'status'    => true,
-            'data'      => $data,
+            'status' => true,
+            'data' => NguoiDung::get(),
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'ho_ten'        => 'required|string|max:255',
-            'email'         => 'required|email|unique:nguoi_dung,email',
+            'ho_ten' => 'required|string|max:255',
+            'email' => 'required|email|unique:nguoi_dung,email',
             'so_dien_thoai' => 'required|string',
         ]);
 
         $user = NguoiDung::create([
-            'ho_ten'        => $request->ho_ten,
-            'email'         => $request->email,
+            'ho_ten' => $request->ho_ten,
+            'email' => $request->email,
             'so_dien_thoai' => $request->so_dien_thoai,
-            'mat_khau'      => Hash::make($request->mat_khau ?? '123456'),
-            'trang_thai'    => $request->trang_thai ?? 1,
+            'mat_khau' => Hash::make($request->mat_khau ?? '123456'),
+            'trang_thai' => $request->trang_thai ?? 1,
         ]);
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Thêm người dùng ' . $request->ho_ten . ' thành công',
-            'data'      => $user,
+            'status' => true,
+            'message' => 'Them nguoi dung thanh cong',
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -166,14 +173,14 @@ class NguoiDungController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Người dùng không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Nguoi dung khong ton tai',
+            ], 404);
         }
 
         return response()->json([
-            'status'    => true,
-            'data'      => $user,
+            'status' => true,
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -183,25 +190,28 @@ class NguoiDungController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Người dùng không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Nguoi dung khong ton tai',
+            ], 404);
         }
 
         $updateData = [
-            'ho_ten'        => $request->ho_ten ?? $user->ho_ten,
-            'email'         => $request->email ?? $user->email,
-            'mat_khau'      => $request->has('mat_khau') ? Hash::make($request->mat_khau) : $user->mat_khau,
+            'ho_ten' => $request->ho_ten ?? $user->ho_ten,
+            'email' => $request->email ?? $user->email,
             'so_dien_thoai' => $request->so_dien_thoai ?? $user->so_dien_thoai,
-            'trang_thai'    => $request->trang_thai ?? $user->trang_thai,
+            'trang_thai' => $request->trang_thai ?? $user->trang_thai,
         ];
 
-        NguoiDung::where('id_nguoi_dung', $id)->update($updateData);
+        if ($request->filled('mat_khau')) {
+            $updateData['mat_khau'] = Hash::make($request->mat_khau);
+        }
+
+        $user->update($updateData);
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Cập nhật người dùng ' . $user->ho_ten . ' thành công',
-            'data'      => NguoiDung::find($id),
+            'status' => true,
+            'message' => 'Cap nhat nguoi dung thanh cong',
+            'data' => $user->fresh()->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -211,33 +221,30 @@ class NguoiDungController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Người dùng không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Nguoi dung khong ton tai',
+            ], 404);
         }
 
-        $ho_ten = $user->ho_ten;
-        NguoiDung::where('id_nguoi_dung', $id)->delete();
+        $user->delete();
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Xóa người dùng ' . $ho_ten . ' thành công',
+            'status' => true,
+            'message' => 'Xoa nguoi dung thanh cong',
         ]);
     }
 
-    // ===== UTILITIES =====
-
     public function search(Request $request)
     {
-        $noi_dung_tim = '%' . $request->noi_dung_tim . '%';
-        $data = NguoiDung::where('ho_ten', 'like', $noi_dung_tim)
-            ->orWhere('email', 'like', $noi_dung_tim)
-            ->orWhere('so_dien_thoai', 'like', $noi_dung_tim)
+        $keyword = '%' . $request->noi_dung_tim . '%';
+        $data = NguoiDung::where('ho_ten', 'like', $keyword)
+            ->orWhere('email', 'like', $keyword)
+            ->orWhere('so_dien_thoai', 'like', $keyword)
             ->get();
 
         return response()->json([
-            'status'    => true,
-            'data'      => $data,
+            'status' => true,
+            'data' => $data,
         ]);
     }
 
@@ -247,18 +254,18 @@ class NguoiDungController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Người dùng không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Nguoi dung khong ton tai',
+            ], 404);
         }
 
         $user->trang_thai = $user->trang_thai == 1 ? 0 : 1;
         $user->save();
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Cập nhật trạng thái ' . $user->ho_ten . ' thành công',
-            'data'      => $user,
+            'status' => true,
+            'message' => 'Cap nhat trang thai thanh cong',
+            'data' => $user->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 }

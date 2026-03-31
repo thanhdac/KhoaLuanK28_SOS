@@ -2,179 +2,151 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AdminRequest;
-use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
-use App\Models\PhanQuyen;
-use App\Support\AuthHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
-    // ===== ADMIN AUTHENTICATION =====
-
     public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
-            'mat_khau' => 'required',
+            'mat_khau' => 'nullable|string',
+            'password' => 'nullable|string',
         ]);
 
-        $user = Admin::where('email', $request->email)->first();
+        $password = $request->input('mat_khau', $request->input('password'));
+        $admin = Admin::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->mat_khau, $user->mat_khau)) {
+        if (!$admin || !$password) {
             return response()->json([
                 'status' => false,
-                'message' => 'Tài khoản sai email hoặc password',
+                'message' => 'Tai khoan sai email hoac password',
             ], 401);
         }
 
-        $token = $user->createToken('API Token')->plainTextToken;
+        if ($admin->mat_khau === $password) {
+            $admin->mat_khau = Hash::make($password);
+            $admin->save();
+        }
+
+        if (!Hash::check($password, $admin->mat_khau)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tai khoan sai email hoac password',
+            ], 401);
+        }
+
+        $token = $admin->createToken('admin-token')->plainTextToken;
 
         return response()->json([
             'status' => true,
-            'message' => 'Đăng nhập thành công',
+            'message' => 'Dang nhap thanh cong',
             'token' => $token,
             'token_type' => 'Bearer',
-            'data' => $user->load('chucVu'),
+            'data' => $admin->load('chucVu')->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
-    public function checkAdmin(Request $request)
+    public function checkAdmin()
     {
-        // Lấy token từ header
-        $token = $request->bearerToken();
-        
-        if (!$token) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Token not provided',
-            ], 401);
-        }
-
-        // Kiểm tra user từ token
         $user = Auth::guard('sanctum')->user();
-        
-        if (!$user) {
+
+        if (!$user || !($user instanceof Admin)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid token',
             ], 401);
         }
 
-        // Kiểm tra nếu không phải admin
-        if (!($user instanceof Admin)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Not an admin user',
-            ], 403);
-        }
-
-        // Kiểm tra account có active không
-        if ($user->trang_thai != 1) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Account is inactive',
-            ], 403);
-        }
-
         return response()->json([
             'status' => true,
             'message' => 'Token valid',
-            'data' => [
-                'id_admin' => $user->id_admin,
-                'ho_ten' => $user->ho_ten,
-                'email' => $user->email,
-                'so_dien_thoai' => $user->so_dien_thoai,
-                'chuc_vu' => $user->chucVu?->ten_chuc_vu,
-                'trang_thai' => $user->trang_thai,
-            ],
+            'data' => $user->load('chucVu')->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
     public function getProfile()
     {
-        if (!AuthHelper::isAdmin()) {
+        $user = Auth::guard('sanctum')->user();
+
+        if (!$user || !($user instanceof Admin)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized',
             ], 401);
         }
 
-        $admin = AuthHelper::user()->load('chucVu');
-
         return response()->json([
             'status' => true,
-            'data' => $admin,
+            'data' => $user->load('chucVu')->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
     public function logout(Request $request)
     {
-        if (!AuthHelper::isAdmin()) {
+        $user = $request->user('sanctum');
+
+        if (!$user || !($user instanceof Admin)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized',
             ], 401);
         }
 
-        $request->user('sanctum')->currentAccessToken()->delete();
+        $token = $user->currentAccessToken();
+        if ($token) {
+            $token->delete();
+        }
 
         return response()->json([
             'status' => true,
-            'message' => 'Đăng xuất thành công',
+            'message' => 'Dang xuat thanh cong',
         ]);
     }
 
-
-
-    // ===== ADMIN CRUD =====
-
     public function index()
     {
-        $data = Admin::with('chucVu')->get();
         return response()->json([
-            'status'    => true,
-            'data'      => $data,
+            'status' => true,
+            'data' => Admin::with('chucVu')->get(),
         ]);
     }
 
     public function store(Request $request)
     {
         $admin = Admin::create([
-            'ho_ten'        => $request->ho_ten,
-            'email'         => $request->email,
-            'mat_khau'      => Hash::make($request->mat_khau),
+            'ho_ten' => $request->ho_ten,
+            'email' => $request->email,
+            'mat_khau' => Hash::make($request->mat_khau ?? '123456'),
             'so_dien_thoai' => $request->so_dien_thoai,
-            'id_chuc_vu'    => $request->id_chuc_vu,
-            'trang_thai'    => $request->trang_thai ?? 1,
+            'id_chuc_vu' => $request->id_chuc_vu,
+            'trang_thai' => $request->trang_thai ?? 1,
         ]);
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Thêm admin ' . $request->ho_ten . ' thành công',
-            'data'      => $admin,
+            'status' => true,
+            'message' => 'Them admin thanh cong',
+            'data' => $admin->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
     public function show($id)
     {
-        $admin = Admin::where('id_admin', $id)->first();
+        $admin = Admin::with('chucVu')->where('id_admin', $id)->first();
 
         if (!$admin) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Admin không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Admin khong ton tai',
+            ], 404);
         }
 
         return response()->json([
-            'status'    => true,
-            'data'      => $admin,
+            'status' => true,
+            'data' => $admin->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -184,26 +156,29 @@ class AdminController extends Controller
 
         if (!$admin) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Admin không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Admin khong ton tai',
+            ], 404);
         }
 
         $updateData = [
-            'ho_ten'        => $request->ho_ten ?? $admin->ho_ten,
-            'email'         => $request->email ?? $admin->email,
-            'mat_khau'      => $request->has('mat_khau') ? Hash::make($request->mat_khau) : $admin->mat_khau,
+            'ho_ten' => $request->ho_ten ?? $admin->ho_ten,
+            'email' => $request->email ?? $admin->email,
             'so_dien_thoai' => $request->so_dien_thoai ?? $admin->so_dien_thoai,
-            'id_chuc_vu'    => $request->id_chuc_vu ?? $admin->id_chuc_vu,
-            'trang_thai'    => $request->trang_thai ?? $admin->trang_thai,
+            'id_chuc_vu' => $request->id_chuc_vu ?? $admin->id_chuc_vu,
+            'trang_thai' => $request->trang_thai ?? $admin->trang_thai,
         ];
 
-        Admin::where('id_admin', $id)->update($updateData);
+        if ($request->filled('mat_khau')) {
+            $updateData['mat_khau'] = Hash::make($request->mat_khau);
+        }
+
+        $admin->update($updateData);
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Cập nhật admin ' . $admin->ho_ten . ' thành công',
-            'data'      => Admin::find($id),
+            'status' => true,
+            'message' => 'Cap nhat admin thanh cong',
+            'data' => $admin->fresh()->load('chucVu')->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -213,33 +188,31 @@ class AdminController extends Controller
 
         if (!$admin) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Admin không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Admin khong ton tai',
+            ], 404);
         }
 
-        $ho_ten = $admin->ho_ten;
-        Admin::where('id_admin', $id)->delete();
+        $admin->delete();
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Xóa admin ' . $ho_ten . ' thành công',
+            'status' => true,
+            'message' => 'Xoa admin thanh cong',
         ]);
     }
 
-    // ===== ADMIN UTILITIES =====
-
     public function search(Request $request)
     {
-        $noi_dung_tim = '%' . $request->noi_dung_tim . '%';
-        $data = Admin::where('ho_ten', 'like', $noi_dung_tim)
-            ->orWhere('email', 'like', $noi_dung_tim)
-            ->orWhere('so_dien_thoai', 'like', $noi_dung_tim)
+        $keyword = '%' . $request->noi_dung_tim . '%';
+        $data = Admin::with('chucVu')
+            ->where('ho_ten', 'like', $keyword)
+            ->orWhere('email', 'like', $keyword)
+            ->orWhere('so_dien_thoai', 'like', $keyword)
             ->get();
 
         return response()->json([
-            'status'    => true,
-            'data'      => $data,
+            'status' => true,
+            'data' => $data,
         ]);
     }
 
@@ -249,18 +222,18 @@ class AdminController extends Controller
 
         if (!$admin) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Admin không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Admin khong ton tai',
+            ], 404);
         }
 
         $admin->trang_thai = $admin->trang_thai == 1 ? 0 : 1;
         $admin->save();
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Cập nhật trạng thái ' . $admin->ho_ten . ' thành công',
-            'data'      => $admin,
+            'status' => true,
+            'message' => 'Cap nhat trang thai thanh cong',
+            'data' => $admin->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 
@@ -270,25 +243,25 @@ class AdminController extends Controller
 
         if (!$admin) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Admin không tồn tại!',
-            ]);
+                'status' => false,
+                'message' => 'Admin khong ton tai',
+            ], 404);
         }
 
         if ($admin->trang_thai == 1) {
             return response()->json([
-                'status'    => false,
-                'message'   => 'Tài khoản đã được kích hoạt trước đó',
-            ]);
+                'status' => false,
+                'message' => 'Tai khoan da duoc kich hoat',
+            ], 400);
         }
 
         $admin->trang_thai = 1;
         $admin->save();
 
         return response()->json([
-            'status'    => true,
-            'message'   => 'Kích hoạt tài khoản thành công',
-            'data'      => $admin,
+            'status' => true,
+            'message' => 'Kich hoat tai khoan thanh cong',
+            'data' => $admin->makeHidden(['mat_khau', 'api_token']),
         ]);
     }
 }
