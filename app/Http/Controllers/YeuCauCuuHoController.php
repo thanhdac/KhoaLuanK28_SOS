@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\YeuCauCuuHoRequest;
 use App\Models\{YeuCauCuuHo, HangDoiXuLy, PhanLoaiAis, DuLieuHeatmap, PhanCongCuuHo};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -123,29 +124,33 @@ class YeuCauCuuHoController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(YeuCauCuuHoRequest $request)
     {
         try {
-            $validated = $request->validate([
-                'id_nguoi_dung' => 'required|integer|exists:nguoi_dung,id_nguoi_dung',
-                'id_loai_su_co' => 'required|integer|exists:loai_su_co,id_loai_su_co',
-                'vi_tri_lat' => 'required|numeric',
-                'vi_tri_lng' => 'required|numeric',
-                'vi_tri_dia_chi' => 'nullable|string|max:500',
-                'chi_tiet' => 'nullable|string',
-                'mo_ta' => 'nullable|string',
-                'hinh_anh' => 'nullable|string',
-                'so_nguoi_bi_anh_huong' => 'nullable|integer|min:0',
-                'muc_do_khan_cap' => 'nullable',
-                'diem_uu_tien' => 'nullable|numeric',
-                'trang_thai' => 'nullable|string'
-            ]);
+            if (is_array($request->input('chi_tiet'))) {
+                $request->merge(['chi_tiet' => implode(', ', $request->input('chi_tiet'))]);
+            }
+
+            $validated = $request->validated();
 
             if (array_key_exists('trang_thai', $validated)) {
                 $validated['trang_thai'] = $this->normalizeTrangThaiYeuCau($validated['trang_thai']);
             }
             if (array_key_exists('muc_do_khan_cap', $validated)) {
                 $validated['muc_do_khan_cap'] = $this->normalizeMucDoKhanCap($validated['muc_do_khan_cap']);
+            }
+
+            if (!array_key_exists('diem_uu_tien', $validated) || $validated['diem_uu_tien'] === null) {
+                $validated['diem_uu_tien'] = 0;
+            }
+            if (!array_key_exists('so_nguoi_bi_anh_huong', $validated) || $validated['so_nguoi_bi_anh_huong'] === null) {
+                $validated['so_nguoi_bi_anh_huong'] = 1;
+            }
+            if (!array_key_exists('muc_do_khan_cap', $validated) || $validated['muc_do_khan_cap'] === null) {
+                $validated['muc_do_khan_cap'] = 'MEDIUM';
+            }
+            if (!array_key_exists('trang_thai', $validated) || $validated['trang_thai'] === null) {
+                $validated['trang_thai'] = 'CHO_XU_LY';
             }
 
             $item = YeuCauCuuHo::create($validated);
